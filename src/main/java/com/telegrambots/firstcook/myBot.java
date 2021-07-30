@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatAdministrators;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.ChatMember;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -49,7 +47,7 @@ public class myBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage();
             message.setChatId(chat_id);
 
-            if (textMessage.startsWith("/adduser") || (update.getMessage().getFrom().getUserName() == "Dankosky")) {
+            if (textMessage.startsWith("/adduser") || (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
                 systemBot.addUserForDB(textMessage.substring(8).trim());
                 message.setText("Записала, шеф.");
                 execute(message);
