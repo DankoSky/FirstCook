@@ -52,8 +52,8 @@ public class myBot extends TelegramLongPollingBot {
                 message.setText("Записала, шеф.");
                 execute(message);
 
-            } else if (textMessage.startsWith("/all") || (textMessage.startsWith("@all"))) {
-//                if (-1001296210331L == update.getMessage().getChatId()) {
+            } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))
+                    && ((-1001296210331L == update.getMessage().getChatId()))) {
                 message.setText("Ага, вот эти ребята:" + systemBot.getAllUserForDB());
                 execute(message);
             } else if (textMessage.contains("фронт")
