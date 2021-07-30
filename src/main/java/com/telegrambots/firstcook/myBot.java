@@ -47,7 +47,7 @@ public class myBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage();
             message.setChatId(chat_id);
 
-            if (textMessage.startsWith("/adduser") || (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
+            if (textMessage.startsWith("/adduser") & (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
                 systemBot.addUserForDB(textMessage.substring(8).trim());
                 message.setText("Записала, шеф.");
                 execute(message);
