@@ -9,8 +9,7 @@ import java.util.*;
 public class SystemBotImpl {
 
 
-
-    Map<Long,Object> InMemoryUsers = new HashMap<>(){{
+    Map<Long, Object> InMemoryUsers = new HashMap<Long, Object>() {{
         put(1L, "@Dankosky");
         put(2L, "@Amitistov");
         put(3L, "@pizzareanimator");
@@ -23,7 +22,7 @@ public class SystemBotImpl {
 
 
     public void addUserForDB(String s) {
-        InMemoryUsers.put(i,s);
+        InMemoryUsers.put(i, s);
         i++;
     }
 
