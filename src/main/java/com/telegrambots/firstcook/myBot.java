@@ -51,11 +51,15 @@ public class myBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage();
             tUser tUser = new tUser();
             message.setChatId(chat_id);
+            int i =0;
+            String count = String.valueOf(i);
 
             if (textMessage.startsWith("/adduser") & (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
                 tUser.setUsername(textMessage.substring(8).trim());
                 tUser.setChat_id(chat_id);
+                tUser.setId(count);
                 systemBot.addUserForDB(tUser);
+                i++;
                 message.setText("Записала, шеф.");
                 execute(message);
 
