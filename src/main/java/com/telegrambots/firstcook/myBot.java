@@ -1,7 +1,10 @@
 package com.telegrambots.firstcook;
 
-import com.telegrambots.firstcook.service.SystemBotImpl;
+import com.telegrambots.firstcook.model.tUser;
+import com.telegrambots.firstcook.service.UsersProfileMongoRepositoryImpl;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,9 +14,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-
-@Component
 @Data
+@Component
+@NoArgsConstructor
+@AllArgsConstructor
 public class myBot extends TelegramLongPollingBot {
     @Value("${telegramBot.userName}")
     private String userName;
@@ -21,10 +25,10 @@ public class myBot extends TelegramLongPollingBot {
     private String botToken;
 
 
-    private final SystemBotImpl systemBot;
+    private UsersProfileMongoRepositoryImpl systemBot;
 
     @Autowired
-    public myBot(SystemBotImpl systemBot) {
+    public myBot(UsersProfileMongoRepositoryImpl systemBot) {
         this.systemBot = systemBot;
     }
 
@@ -45,17 +49,22 @@ public class myBot extends TelegramLongPollingBot {
             String chat_id = String.valueOf(update.getMessage().getChatId());
             String textMessage = update.getMessage().getText().toLowerCase();
             SendMessage message = new SendMessage();
+            tUser tUser = new tUser();
             message.setChatId(chat_id);
 
             if (textMessage.startsWith("/adduser") & (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
-                systemBot.addUserForDB(textMessage.substring(8).trim());
+                tUser.setUsername(textMessage.substring(8).trim());
+                tUser.setChat_id(chat_id);
+                systemBot.addUserForDB(tUser);
                 message.setText("Записала, шеф.");
                 execute(message);
 
+
             } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))
                     & ((-1001296210331L == update.getMessage().getChatId()) | (update.getMessage().getFrom().getUserName().equals("Dankosky")))) {
-                message.setText("Ага, вот эти ребята:" + systemBot.getAllUserForDB());
+                message.setText("Ага, вот эти ребята:" + systemBot.toStringTagAll(systemBot.getAllUserForDB(chat_id)));
                 execute(message);
+
             } else if(textMessage.contains("фронт")
                     || textMessage.contains("frontend")
                     || textMessage.contains("front-end")) {
