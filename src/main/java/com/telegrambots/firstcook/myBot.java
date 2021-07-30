@@ -14,6 +14,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Date;
+
 @Data
 @Component
 @NoArgsConstructor
@@ -45,21 +47,21 @@ public class myBot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
+        Date date = null;
         if (update.getMessage() != null && update.getMessage().hasText()) {
             String chat_id = String.valueOf(update.getMessage().getChatId());
             String textMessage = update.getMessage().getText().toLowerCase();
             SendMessage message = new SendMessage();
             tUser tUser = new tUser();
             message.setChatId(chat_id);
-            int i =0;
+            int i = 0;
             String count = String.valueOf(i);
 
             if (textMessage.startsWith("/adduser") & (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
                 tUser.setUsername(textMessage.substring(8).trim());
                 tUser.setChat_id(chat_id);
-                tUser.setId(count);
+                tUser.setId(update.getMessage().getMessageId().toString());
                 systemBot.addUserForDB(tUser);
-                i++;
                 message.setText("Записала, шеф.");
                 execute(message);
 
@@ -69,7 +71,7 @@ public class myBot extends TelegramLongPollingBot {
                 message.setText("Ага, вот эти ребята:" + systemBot.toStringTagAll(systemBot.getAllUserForDB(chat_id)));
                 execute(message);
 
-            } else if(textMessage.contains("фронт")
+            } else if (textMessage.contains("фронт")
                     || textMessage.contains("frontend")
                     || textMessage.contains("front-end")) {
                 try {
