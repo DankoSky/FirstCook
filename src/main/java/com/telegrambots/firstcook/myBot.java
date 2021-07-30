@@ -53,7 +53,7 @@ public class myBot extends TelegramLongPollingBot {
                 execute(message);
 
             } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))
-                    && ((-1001296210331L == update.getMessage().getChatId()))) {
+                    && ((-1001296210331L == update.getMessage().getChatId())) || (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
                 message.setText("Ага, вот эти ребята:" + systemBot.getAllUserForDB());
                 execute(message);
             } else if (textMessage.contains("фронт")
