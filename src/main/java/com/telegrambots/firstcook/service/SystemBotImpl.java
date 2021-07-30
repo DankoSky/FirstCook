@@ -31,20 +31,6 @@ public class SystemBotImpl {
         return InMemoryUsers.values().toString();
     }
 
-//    public String getAllrules() {
-//        return "rules";
-//    }
-//
-//    public String getAllBirthday() {
-//        return "birthday";
-//    }
-//
-//    public String getBirthdayForName(String name) {
-//        return "birthday" + name;
-//    }
-//    public String addBirthdayForName(String name, Long date) {
-//        return "birthday" + date;
-//    }
 
 
 }
