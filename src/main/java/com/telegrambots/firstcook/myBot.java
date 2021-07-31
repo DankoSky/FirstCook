@@ -47,32 +47,24 @@ public class myBot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        Date date = null;
         if (update.getMessage() != null && update.getMessage().hasText()) {
             String chat_id = String.valueOf(update.getMessage().getChatId());
             String textMessage = update.getMessage().getText().toLowerCase();
             SendMessage message = new SendMessage();
-
             tUser tUser = new tUser();
             message.setChatId(chat_id);
 
-            if (textMessage.startsWith("/adduser") & (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
+            if (textMessage.startsWith("/adduser")) {
                 tUser.setUsername(textMessage.substring(8).trim());
                 tUser.setChat_id(chat_id);
                 tUser.setId(update.getMessage().getMessageId().toString());
                 systemBot.addUserForDB(tUser);
                 message.setText("Записала, шеф.");
                 execute(message);
-
-            } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all"))))
-                   // & ((-1001296210331L == update.getMessage().getChatId())))
-            {
+            } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
                 message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
                 execute(message);
-
-            } else if (textMessage.contains("фронт")
-                    || textMessage.contains("frontend")
-                    || textMessage.contains("front-end")) {
+            } else if (textMessage.contains("фронт") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("Frontend для пидоров");
