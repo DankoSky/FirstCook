@@ -52,10 +52,9 @@ public class myBot extends TelegramLongPollingBot {
             String chat_id = String.valueOf(update.getMessage().getChatId());
             String textMessage = update.getMessage().getText().toLowerCase();
             SendMessage message = new SendMessage();
+
             tUser tUser = new tUser();
             message.setChatId(chat_id);
-            int i = 0;
-            String count = String.valueOf(i);
 
             if (textMessage.startsWith("/adduser") & (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
                 tUser.setUsername(textMessage.substring(8).trim());
@@ -65,10 +64,9 @@ public class myBot extends TelegramLongPollingBot {
                 message.setText("Записала, шеф.");
                 execute(message);
 
-
             } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))
-                    & ((-1001296210331L == update.getMessage().getChatId()) | (update.getMessage().getFrom().getUserName().equals("Dankosky")))) {
-                message.setText("Ага, вот эти ребята:" + systemBot.toStringTagAll(systemBot.getAllUserForDB(chat_id)));
+                    & ((-1001296210331L == update.getMessage().getChatId()))) {
+                message.setText("Ага, вот эти ребята:" + systemBot.getAllUserForDB(chat_id).stream().map(x->x.username+",").reduce("",(y,x) -> y + x));
                 execute(message);
 
             } else if (textMessage.contains("фронт")

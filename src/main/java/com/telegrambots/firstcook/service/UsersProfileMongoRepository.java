@@ -12,6 +12,7 @@ public interface UsersProfileMongoRepository extends MongoRepository<tUser, Stri
 
         List<tUser> findAllById(String chat_id);
         void deleteByUsername(String username);
+      //  List<tUser> findAllBychat_id(String chat_id);
   //  void addyUserDb(tUser user);
 //    void deletetUserByUsername(String username);
 //    void deleteAllByChat_id(Long Chat_id);

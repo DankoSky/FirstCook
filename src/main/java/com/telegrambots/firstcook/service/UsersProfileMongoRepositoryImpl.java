@@ -19,9 +19,7 @@ public class UsersProfileMongoRepositoryImpl {
     }
 
     public List<tUser> getAllUserForDB(String Chat_id) {
-        return   UsersProfileMongoRepository.findAllById(Chat_id)==null?
-                Collections.emptyList()
-                :UsersProfileMongoRepository.findAllById(Chat_id);
+        return  UsersProfileMongoRepository.findAll();
 
     }
 
