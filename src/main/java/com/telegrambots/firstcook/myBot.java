@@ -64,10 +64,18 @@ public class myBot extends TelegramLongPollingBot {
             } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
                 message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
                 execute(message);
-            } else if (textMessage.contains("фронт") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
+            } else if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("Frontend для пидоров");
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            } else if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
+                try {
+                    message.setReplyToMessageId(update.getMessage().getMessageId());
+                    message.setText("Бэкенд для солидных господ, мое увожение");
                     execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
