@@ -5,12 +5,13 @@ import com.telegrambots.firstcook.model.tUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.*;
 
 @Service
 public class UsersProfileMongoRepositoryImpl {
+
+
     @Autowired
     private UsersProfileMongoRepository UsersProfileMongoRepository;
 
@@ -18,17 +19,16 @@ public class UsersProfileMongoRepositoryImpl {
         UsersProfileMongoRepository.save(s);
     }
 
-    public List<tUser> getAllUserForDB(String Chat_id) {
-        return  UsersProfileMongoRepository.findAll();
-
-    }
-
-    public String toStringTagAll(List<tUser> tUserList) {
-        StringBuilder alluser = new StringBuilder();
-        for (tUser t : tUserList) {
-            alluser.append(t.getUsername());
-
+    public String getAllUserForDB(String Chat_id) {
+         List<tUser> temp =UsersProfileMongoRepository.findAll();
+         ArrayList<tUser> temp2= new ArrayList<>();
+         StringBuilder s= new StringBuilder();
+        for (com.telegrambots.firstcook.model.tUser tUser : temp) {
+            if (tUser.chat_id.equals(Chat_id)) {
+                s.append(tUser.username).append(", ");
+            }
         }
-        return alluser.toString();
+        return s.toString();
+
     }
 }
