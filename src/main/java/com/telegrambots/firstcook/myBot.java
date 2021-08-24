@@ -87,8 +87,6 @@ public class myBot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-                sendImageFromUrl("https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg",chat_id);
-
             }
 
             if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
@@ -110,10 +108,12 @@ public class myBot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-                sendImageFromUrl("https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg",chat_id);
 
             }
 
+            if (count % 5 == 0) {
+                sendImageFromUrl("https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg", chat_id);
+            }
         }
 
     }
