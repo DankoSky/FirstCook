@@ -54,21 +54,6 @@ public class myBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage();
             tUser tUser = new tUser();
             message.setChatId(chat_id);
-            int count = 0;
-            int random1 = random.nextInt(30);
-
-            if (!textMessage.isEmpty()) {
-                count++;
-                if (count == random1) {
-                    try {
-                        message.setReplyToMessageId(update.getMessage().getMessageId());
-                        message.setText("А ты походу шаришь");
-                        execute(message);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
 
             if (textMessage.startsWith("/adduser")) {
                 try {
@@ -106,6 +91,23 @@ public class myBot extends TelegramLongPollingBot {
                     execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
+                }
+            }
+
+            int count = 0;
+            int random1 = random.nextInt(30);
+
+            if (!textMessage.isEmpty()) {
+                count++;
+                if (count == random1) {
+                    try {
+                        message.setReplyToMessageId(update.getMessage().getMessageId());
+                        message.setText("А ты походу шаришь");
+                        execute(message);
+                        count=0;
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
