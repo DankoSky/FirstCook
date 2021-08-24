@@ -57,30 +57,22 @@ public class myBot extends TelegramLongPollingBot {
             String chat_id = String.valueOf(update.getMessage().getChatId());
             String textMessage = update.getMessage().getText().toLowerCase();
             SendMessage message = new SendMessage();
-            int count = update.getMessage().getMessageId();
             tUser tUser = new tUser();
             message.setChatId(chat_id);
+            int count = update.getMessage().getMessageId();
 
             if (textMessage.startsWith("/adduser")) {
-                try {
-                    tUser.setUsername(textMessage.substring(8).trim());
-                    tUser.setChat_id(chat_id);
-                    tUser.setId(update.getMessage().getMessageId().toString());
-                    systemBot.addUserForDB(tUser);
-                    message.setText("Записала, шеф.");
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+                tUser.setUsername(textMessage.substring(8).trim());
+                tUser.setChat_id(chat_id);
+                tUser.setId(update.getMessage().getMessageId().toString());
+                systemBot.addUserForDB(tUser);
+                message.setText("Записала, шеф.");
+                execute(message);
+            } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
+                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
+                execute(message);
             }
-            if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
-                try {
-                    message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
+
             if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
@@ -91,6 +83,7 @@ public class myBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
+
             if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
@@ -113,6 +106,8 @@ public class myBot extends TelegramLongPollingBot {
             }
             if (count % 5 == 0) {
                 try {
+                    message.setText("test");
+                    execute(message);
                     InputFile inputFile = new InputFile("C:\\Users\\Bublic\\IdeaProjects\\FirstCook\\src\\main\\resources\\templates\\Foto.png");
                     SendPhoto sendPhoto = new SendPhoto();
                     sendPhoto.setCaption("My Caption!");
@@ -126,4 +121,40 @@ public class myBot extends TelegramLongPollingBot {
 
     }
 }
+/*public void onUpdateReceived(Update update) {
+        if (update.getMessage() != null && update.getMessage().hasText()) {
+            String chat_id = String.valueOf(update.getMessage().getChatId());
+            String textMessage = update.getMessage().getText().toLowerCase();
+            SendMessage message = new SendMessage();
+            tUser tUser = new tUser();
+            message.setChatId(chat_id);
 
+            if (textMessage.startsWith("/adduser")) {
+                tUser.setUsername(textMessage.substring(8).trim());
+                tUser.setChat_id(chat_id);
+                tUser.setId(update.getMessage().getMessageId().toString());
+                systemBot.addUserForDB(tUser);
+                message.setText("Записала, шеф.");
+                execute(message);
+            } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
+                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
+                execute(message);
+            } else if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
+                try {
+                    message.setReplyToMessageId(update.getMessage().getMessageId());
+                    message.setText("Frontend для пидоров");
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            } else if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
+                try {
+                    message.setReplyToMessageId(update.getMessage().getMessageId());
+                    message.setText("Бэкенд для солидных господ, мое увожение");
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }*/
