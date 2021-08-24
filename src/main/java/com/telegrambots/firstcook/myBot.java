@@ -108,8 +108,9 @@ public class myBot extends TelegramLongPollingBot {
                 try {
                     message.setText("test");
                     execute(message);
-                    InputFile inputFile = new InputFile("C:\\Users\\Bublic\\IdeaProjects\\FirstCook\\src\\main\\resources\\templates\\Foto.png");
+                    InputFile inputFile = new InputFile("http://www.rosphoto.com/images/u/articles/1510/42_2.jpg");
                     SendPhoto sendPhoto = new SendPhoto();
+
                     sendPhoto.setCaption("My Caption!");
                     sendPhoto.setPhoto(inputFile);
                     execute(sendPhoto);
