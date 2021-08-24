@@ -106,8 +106,6 @@ public class myBot extends TelegramLongPollingBot {
             }
             if (count % 5 == 0) {
                 try {
-                    message.setText("test");
-                    execute(message);
                     InputFile inputFile = new InputFile("http://www.rosphoto.com/images/u/articles/1510/42_2.jpg");
                     SendPhoto sendPhoto = new SendPhoto();
 
