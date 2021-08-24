@@ -109,41 +109,54 @@ public class myBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
+            sendImageFromUrl("https://static-cse.canva.com/blob/195615/paul-skorupskas-7KLa-xLbSXA-unsplash-2.jpg",chat_id);
 
-            if (update.hasMessage() && update.getMessage().hasPhoto()) {
-                // Array with photos
-                List<PhotoSize> photos = update.getMessage().getPhoto();
-                // Get largest photo's file_id
-                String f_id = photos.stream()
-                        .max(Comparator.comparing(PhotoSize::getFileSize))
-                        .orElseThrow().getFileId();
-                message.setText(f_id);
-                execute(message);
-                // Send photo by file_id we got before
-//                SendPhoto msg = new SendPhoto()
-//                        .setChatId(chat_id)
-//                        .setPhoto(new InputFile(f_id))
-//                        .setCaption("Photo");
-//                try {
-//                    execute(msg); // Call method to send the photo
-//                } catch (TelegramApiException e) {
-//                    e.printStackTrace();
-//                }
-            }
-//            if (count % 5 == 0) {
-//                try {
-//
-//                    SendPhoto sendPhoto = new SendPhoto();
-//                    sendPhoto.setCaption("My Caption!");
-//                    sendPhoto.setPhoto(inputFile);
-//
-//                    execute(sendPhoto);
-//                } catch (TelegramApiException e) {
-//                    e.printStackTrace();
-//                }
-//            }
         }
 
+    }
+    public void sendImageFromUrl(String url, String chatId) {
+        // Create send method
+        SendPhoto sendPhotoRequest = new SendPhoto();
+        // Set destination chat id
+        sendPhotoRequest.setChatId(chatId);
+        // Set the photo url as a simple photo
+        sendPhotoRequest.setPhoto(new InputFile(url));
+        try {
+            // Execute the method
+            execute(sendPhotoRequest);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendImageFromFileId(String fileId, String chatId) {
+        // Create send method
+        SendPhoto sendPhotoRequest = new SendPhoto();
+        // Set destination chat id
+        sendPhotoRequest.setChatId(chatId);
+        // Set the photo url as a simple photo
+        sendPhotoRequest.setPhoto(new InputFile(fileId));
+        try {
+            // Execute the method
+            execute(sendPhotoRequest);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendImageUploadingAFile(String filePath, String chatId) {
+        // Create send method
+        SendPhoto sendPhotoRequest = new SendPhoto();
+        // Set destination chat id
+        sendPhotoRequest.setChatId(chatId);
+        // Set the photo file as a new photo (You can also use InputStream with a constructor overload)
+        sendPhotoRequest.setPhoto(new InputFile(new File(filePath)));
+        try {
+            // Execute the method
+            execute(sendPhotoRequest);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 }
 
