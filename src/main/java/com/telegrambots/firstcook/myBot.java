@@ -28,7 +28,7 @@ public class myBot extends TelegramLongPollingBot {
 
 
     private UsersProfileMongoRepositoryImpl systemBot;
-    private Random random;
+    private Random random= new Random();
 
     @Autowired
     public myBot(UsersProfileMongoRepositoryImpl systemBot) {
