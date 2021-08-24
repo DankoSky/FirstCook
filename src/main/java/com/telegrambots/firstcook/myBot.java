@@ -99,17 +99,11 @@ public class myBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-            if (count % 100 == 0) {
-                try {
-                    message.setReplyToMessageId(update.getMessage().getMessageId());
-                    message.setText("А ты походу шаришь");
-                    TimeUnit.SECONDS.sleep(5);
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            sendImageFromUrl("https://static-cse.canva.com/blob/195615/paul-skorupskas-7KLa-xLbSXA-unsplash-2.jpg",chat_id);
+           // if (count % 100 == 0) {
+
+                sendImageFromUrl("http://risovach.ru/upload/2014/10/mem/hitriy-getsbi_64999584_orig_.jpeg",chat_id);
+
+
 
         }
 
@@ -119,6 +113,7 @@ public class myBot extends TelegramLongPollingBot {
         SendPhoto sendPhotoRequest = new SendPhoto();
         // Set destination chat id
         sendPhotoRequest.setChatId(chatId);
+        sendPhotoRequest.setReplyToMessageId((Integer.parseInt(chatId)));
         // Set the photo url as a simple photo
         sendPhotoRequest.setPhoto(new InputFile(url));
         try {
