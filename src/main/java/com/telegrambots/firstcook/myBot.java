@@ -87,6 +87,8 @@ public class myBot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+                sendImageFromUrl("https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg",chat_id);
+
             }
 
             if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
@@ -99,21 +101,28 @@ public class myBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-           // if (count % 100 == 0) {
+            if (count % 100 == 0) {
+                try {
+                    message.setReplyToMessageId(update.getMessage().getMessageId());
+                    message.setText("А ты походу шаришь");
+                    TimeUnit.SECONDS.sleep(5);
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+                sendImageFromUrl("https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg",chat_id);
 
-                sendImageFromUrl("http://risovach.ru/upload/2014/10/mem/hitriy-getsbi_64999584_orig_.jpeg",chat_id);
-
-
+            }
 
         }
 
     }
+
     public void sendImageFromUrl(String url, String chatId) {
         // Create send method
         SendPhoto sendPhotoRequest = new SendPhoto();
         // Set destination chat id
         sendPhotoRequest.setChatId(chatId);
-        sendPhotoRequest.setReplyToMessageId((Integer.parseInt(chatId)));
         // Set the photo url as a simple photo
         sendPhotoRequest.setPhoto(new InputFile(url));
         try {
