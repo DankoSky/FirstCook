@@ -1,5 +1,6 @@
 package com.telegrambots.firstcook;
 
+import ch.qos.logback.core.pattern.parser.Parser;
 import com.telegrambots.firstcook.model.tUser;
 import com.telegrambots.firstcook.service.UsersProfileMongoRepositoryImpl;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.commons.CommonsFileUploadSupport;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -104,56 +106,20 @@ public class myBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-            if (count % 5 == 0) {
-                try {
-                    InputFile inputFile = new InputFile("http://www.rosphoto.com/images/u/articles/1510/42_2.jpg");
-                    SendPhoto sendPhoto = new SendPhoto();
-
-                    sendPhoto.setCaption("My Caption!");
-                    sendPhoto.setPhoto(inputFile);
-                    execute(sendPhoto);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
+//            if (count % 5 == 0) {
+//                try {
+//
+//                    SendPhoto sendPhoto = new SendPhoto();
+//                    sendPhoto.setCaption("My Caption!");
+//                    sendPhoto.setPhoto(inputFile);
+//
+//                    execute(sendPhoto);
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
+//            }
         }
 
     }
 }
-/*public void onUpdateReceived(Update update) {
-        if (update.getMessage() != null && update.getMessage().hasText()) {
-            String chat_id = String.valueOf(update.getMessage().getChatId());
-            String textMessage = update.getMessage().getText().toLowerCase();
-            SendMessage message = new SendMessage();
-            tUser tUser = new tUser();
-            message.setChatId(chat_id);
 
-            if (textMessage.startsWith("/adduser")) {
-                tUser.setUsername(textMessage.substring(8).trim());
-                tUser.setChat_id(chat_id);
-                tUser.setId(update.getMessage().getMessageId().toString());
-                systemBot.addUserForDB(tUser);
-                message.setText("Записала, шеф.");
-                execute(message);
-            } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
-                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
-                execute(message);
-            } else if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
-                try {
-                    message.setReplyToMessageId(update.getMessage().getMessageId());
-                    message.setText("Frontend для пидоров");
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            } else if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
-                try {
-                    message.setReplyToMessageId(update.getMessage().getMessageId());
-                    message.setText("Бэкенд для солидных господ, мое увожение");
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }*/
