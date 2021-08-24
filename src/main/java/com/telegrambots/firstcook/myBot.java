@@ -98,21 +98,6 @@ public class myBot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-                Random random = new Random();
-                int i = random.nextInt(3);
-                String url1 = "https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg";
-                String url2 = "https://img3.goodfon.ru/wallpaper/nbig/0/3c/minions-bob-look-happy.jpg";
-                String url3 = "https://cs8.pikabu.ru/post_img/2016/04/03/11/145970901515739079.png";
-
-                if (i == 0) {
-                    sendImageFromUrl(url1, chat_id);
-                }
-                if (i == 1) {
-                    sendImageFromUrl(url2, chat_id);
-                }
-                if (i == 2) {
-                    sendImageFromUrl(url3, chat_id);
-                }
             }
             if (count % 150 == 0) {
                 try {
@@ -123,11 +108,9 @@ public class myBot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-
             }
 
             if (count % 100 == 0) {
-
                 Random random = new Random();
                 int i = random.nextInt(3);
                 String url1 = "https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg";
@@ -145,7 +128,6 @@ public class myBot extends TelegramLongPollingBot {
                 }
             }
         }
-
     }
 
     public void sendImageFromUrl(String url, String chatId) {
