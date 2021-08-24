@@ -52,6 +52,7 @@ public class myBot extends TelegramLongPollingBot {
             String chat_id = String.valueOf(update.getMessage().getChatId());
             String textMessage = update.getMessage().getText().toLowerCase();
             SendMessage message = new SendMessage();
+            int count = update.getMessage().getMessageId();
             tUser tUser = new tUser();
             message.setChatId(chat_id);
 
@@ -93,17 +94,11 @@ public class myBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-
-            int count = 0;
-
-
-            if (update.getMessage().getMessageId() % 3 == 0) {
+            if (count % 30 == 0) {
                 try {
-
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("А ты походу шаришь");
                     execute(message);
-
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
