@@ -28,7 +28,7 @@ public class myBot extends TelegramLongPollingBot {
 
 
     private UsersProfileMongoRepositoryImpl systemBot;
-    private Random random= new Random();
+    private Random random = new Random();
 
     @Autowired
     public myBot(UsersProfileMongoRepositoryImpl systemBot) {
@@ -95,16 +95,16 @@ public class myBot extends TelegramLongPollingBot {
             }
 
             int count = 0;
-            int random1 = random.nextInt(10);
+            int random1 = random.nextInt(5);
 
-            if (!textMessage.isBlank()) {
+            if (!textMessage.startsWith("с")) {
                 count++;
                 if (count == random1) {
                     try {
                         message.setReplyToMessageId(update.getMessage().getMessageId());
                         message.setText("А ты походу шаришь");
                         execute(message);
-                        count=0;
+                        count = 0;
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
