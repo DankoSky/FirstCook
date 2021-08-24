@@ -98,6 +98,12 @@ public class myBot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+                String url1 = "https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg";
+                String url2 = "https://img3.goodfon.ru/wallpaper/nbig/0/3c/minions-bob-look-happy.jpg";
+                String url3 = "https://cs8.pikabu.ru/post_img/2016/04/03/11/145970901515739079.png";
+                Random rand = new Random();
+                int randomNum = rand.nextInt((3 - 1) + 1) + 1;
+                sendImageFromUrl("url"+randomNum, chat_id);
             }
             if (count % 150 == 0) {
                 try {
