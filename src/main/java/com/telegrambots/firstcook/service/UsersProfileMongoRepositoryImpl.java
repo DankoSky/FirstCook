@@ -2,18 +2,23 @@ package com.telegrambots.firstcook.service;
 
 
 import com.telegrambots.firstcook.model.tUser;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 
 import java.util.*;
 
 @Service
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsersProfileMongoRepositoryImpl {
-    @Autowired
     private UsersProfileMongoRepository UsersProfileMongoRepository;
 
-    public void addUserForDB( tUser s) {
+    public void addUserForDB(tUser s) {
         UsersProfileMongoRepository.save(s);
     }
 
@@ -28,4 +33,6 @@ public class UsersProfileMongoRepositoryImpl {
         }
         return s.toString();
     }
+
+
 }
