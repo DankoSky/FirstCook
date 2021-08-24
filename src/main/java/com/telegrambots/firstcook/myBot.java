@@ -95,9 +95,9 @@ public class myBot extends TelegramLongPollingBot {
             }
 
             int count = 0;
-            int random1 = random.nextInt(30);
+            int random1 = random.nextInt(10);
 
-            if (!textMessage.isEmpty()) {
+            if (!textMessage.isBlank()) {
                 count++;
                 if (count == random1) {
                     try {
