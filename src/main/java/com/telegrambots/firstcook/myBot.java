@@ -14,6 +14,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Random;
+
 @Data
 @Component
 @NoArgsConstructor
@@ -26,6 +28,7 @@ public class myBot extends TelegramLongPollingBot {
 
 
     private UsersProfileMongoRepositoryImpl systemBot;
+    private Random random;
 
     @Autowired
     public myBot(UsersProfileMongoRepositoryImpl systemBot) {
@@ -51,24 +54,38 @@ public class myBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage();
             tUser tUser = new tUser();
             message.setChatId(chat_id);
+            int count = 0;
+            int random1 = random.nextInt(30);
 
+            if (!textMessage.isEmpty()) {
+                count++;
+                if (count == random1) {
+                    try {
+                        message.setReplyToMessageId(update.getMessage().getMessageId());
+                        message.setText("А ты походу шаришь");
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
             if (textMessage.startsWith("/adduser")) {
                 try {
-                tUser.setUsername(textMessage.substring(8).trim());
-                tUser.setChat_id(chat_id);
-                tUser.setId(update.getMessage().getMessageId().toString());
-                systemBot.addUserForDB(tUser);
-                message.setText("Записала, шеф.");
-                execute(message);
+                    tUser.setUsername(textMessage.substring(8).trim());
+                    tUser.setChat_id(chat_id);
+                    tUser.setId(update.getMessage().getMessageId().toString());
+                    systemBot.addUserForDB(tUser);
+                    message.setText("Записала, шеф.");
+                    execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
             }
             if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
                 try {
-                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
-                execute(message);
+                    message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
+                    execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
