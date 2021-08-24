@@ -46,58 +46,47 @@ public class myBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.getMessage() != null && update.getMessage().hasText()) {
-           checkCommand(update);
-           checkMessage(update);
-
-        }
-    }
-
-    public void checkMessage(Update update) throws TelegramApiException {
-        String chat_id = String.valueOf(update.getMessage().getChatId());
-        String textMessage = update.getMessage().getText().toLowerCase();
-        SendMessage message = new SendMessage();
-        tUser tUser = new tUser();
-        message.setChatId(chat_id);
-
-        if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
-            message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
+            String chat_id = String.valueOf(update.getMessage().getChatId());
+            String textMessage = update.getMessage().getText().toLowerCase();
+            SendMessage message = new SendMessage();
+            tUser tUser = new tUser();
+            message.setChatId(chat_id);
+            systemBot.checkCommand(update);
             execute(message);
-        }
-        if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
-            try {
-                message.setReplyToMessageId(update.getMessage().getMessageId());
-                message.setText("Frontend для пидоров");
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
-        if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
-            try {
-                message.setReplyToMessageId(update.getMessage().getMessageId());
-                message.setText("Бэкенд для солидных господ, мое увожение ");
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
-    public void checkCommand(Update update) throws TelegramApiException {
-        String chat_id = String.valueOf(update.getMessage().getChatId());
-        String textMessage = update.getMessage().getText().toLowerCase();
-        SendMessage message = new SendMessage();
-        tUser tUser = new tUser();
-        message.setChatId(chat_id);
+//            if (textMessage.startsWith("/adduser")) {
+//                tUser.setUsername(textMessage.substring(8).trim());
+//                tUser.setChat_id(chat_id);
+//                tUser.setId(update.getMessage().getMessageId().toString());
+//                systemBot.addUserForDB(tUser);
+//                message.setText("Записала, шеф.");
+//                execute(message);
+//            }
 
-        if (textMessage.startsWith("/adduser")) {
-            tUser.setUsername(textMessage.substring(8).trim());
-            tUser.setChat_id(chat_id);
-            tUser.setId(update.getMessage().getMessageId().toString());
-            systemBot.addUserForDB(tUser);
-            message.setText("Записала, шеф.");
-            execute(message);
+
+            if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
+                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
+                execute(message);
+            }
+            if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
+                try {
+                    message.setReplyToMessageId(update.getMessage().getMessageId());
+                    message.setText("Frontend для пидоров");
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
+                try {
+                    message.setReplyToMessageId(update.getMessage().getMessageId());
+                    message.setText("Бэкенд для солидных господ, мое увожение ");
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
-        checkMessage(update);
     }
 }
