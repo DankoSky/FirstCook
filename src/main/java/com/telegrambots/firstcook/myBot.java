@@ -52,19 +52,26 @@ public class myBot extends TelegramLongPollingBot {
             tUser tUser = new tUser();
             message.setChatId(chat_id);
 
+
             if (textMessage.startsWith("/adduser")) {
+                try {
                 tUser.setUsername(textMessage.substring(8).trim());
                 tUser.setChat_id(chat_id);
                 tUser.setId(update.getMessage().getMessageId().toString());
                 systemBot.addUserForDB(tUser);
                 message.setText("Записала, шеф.");
                 execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
-
-
             if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
+                try {
                 message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
                 execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
             if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
                 try {
@@ -75,7 +82,6 @@ public class myBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-
             if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
