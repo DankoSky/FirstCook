@@ -51,17 +51,15 @@ public class myBot extends TelegramLongPollingBot {
             SendMessage message = new SendMessage();
             tUser tUser = new tUser();
             message.setChatId(chat_id);
-            systemBot.checkCommand(update);
-            execute(message);
 
-//            if (textMessage.startsWith("/adduser")) {
-//                tUser.setUsername(textMessage.substring(8).trim());
-//                tUser.setChat_id(chat_id);
-//                tUser.setId(update.getMessage().getMessageId().toString());
-//                systemBot.addUserForDB(tUser);
-//                message.setText("Записала, шеф.");
-//                execute(message);
-//            }
+            if (textMessage.startsWith("/adduser")) {
+                tUser.setUsername(textMessage.substring(8).trim());
+                tUser.setChat_id(chat_id);
+                tUser.setId(update.getMessage().getMessageId().toString());
+                systemBot.addUserForDB(tUser);
+                message.setText("Записала, шеф.");
+                execute(message);
+            }
 
 
             if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
@@ -77,6 +75,7 @@ public class myBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
+
             if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());

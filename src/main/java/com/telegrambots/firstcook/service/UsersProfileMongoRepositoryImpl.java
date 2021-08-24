@@ -35,20 +35,4 @@ public class UsersProfileMongoRepositoryImpl {
         }
         return s.toString();
     }
-
-    public void checkCommand(Update update) {
-        String chat_id = String.valueOf(update.getMessage().getChatId());
-        String textMessage = update.getMessage().getText().toLowerCase();
-        SendMessage message = new SendMessage();
-        tUser tUser = new tUser();
-        message.setChatId(chat_id);
-
-        if (textMessage.startsWith("/adduser")) {
-            tUser.setUsername(textMessage.substring(8).trim());
-            tUser.setChat_id(chat_id);
-            tUser.setId(update.getMessage().getMessageId().toString());
-            systemBot.addUserForDB(tUser);
-            message.setText("Записала, шеф.");
-        }
-    }
 }
