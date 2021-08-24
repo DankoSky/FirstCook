@@ -11,10 +11,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Data
 @Component
@@ -80,6 +85,7 @@ public class myBot extends TelegramLongPollingBot {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("Frontend для пидоров");
+                    TimeUnit.SECONDS.sleep(5);
                     execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -89,16 +95,29 @@ public class myBot extends TelegramLongPollingBot {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("Бэкенд для солидных господ, мое увожение ");
+                    TimeUnit.SECONDS.sleep(5);
                     execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
             }
-            if (count % 30 == 0) {
+            if (count % 100 == 0) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("А ты походу шаришь");
+                    TimeUnit.SECONDS.sleep(5);
                     execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (count % 5 == 0) {
+                try {
+                    InputFile inputFile = new InputFile("C:\\Users\\Bublic\\IdeaProjects\\FirstCook\\src\\main\\resources\\templates\\Foto.png");
+                    SendPhoto sendPhoto = new SendPhoto();
+                    sendPhoto.setCaption("My Caption!");
+                    sendPhoto.setPhoto(inputFile);
+                    execute(sendPhoto);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
