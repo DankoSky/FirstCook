@@ -2,9 +2,9 @@ package com.telegrambots.firstcook.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 
@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PUBLIC)
-@Document(collection = "myFirstDatabase")
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class tUser implements Serializable {
