@@ -1,6 +1,5 @@
 package com.telegrambots.firstcook;
 
-import ch.qos.logback.core.pattern.parser.Parser;
 import com.telegrambots.firstcook.model.tUser;
 import com.telegrambots.firstcook.service.UsersProfileMongoRepositoryImpl;
 import lombok.AllArgsConstructor;
@@ -10,19 +9,14 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.commons.CommonsFileUploadSupport;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -73,7 +67,8 @@ public class myBot extends TelegramLongPollingBot {
                 systemBot.addUserForDB(tUser);
                 message.setText("Записала, шеф.");
                 execute(message);
-            } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
+            }
+            if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
                 message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
                 execute(message);
             }
