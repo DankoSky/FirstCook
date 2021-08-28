@@ -37,7 +37,7 @@ public class myBot extends TelegramLongPollingBot {
     private tUserServiceImpl systemBot;
 
     @Autowired
-    public myBot(tUserServiceImpl systemBot) {   
+    public myBot(tUserServiceImpl systemBot) {
         this.systemBot = systemBot;
     }
 
@@ -67,17 +67,15 @@ public class myBot extends TelegramLongPollingBot {
             String chat_id = update.getMessage().getChatId().toString();
             String textMessage = update.getMessage().getText().toLowerCase();
             SendMessage message = new SendMessage();
-
+            tUser user = new tUser();
             message.setChatId(chat_id);
             int count = update.getMessage().getMessageId();  //  id сообщения, чтобы выбрасывать в определенный момент событие.
             Random random = new Random();
 
             if (textMessage.startsWith("/adduser")) {
-                tUser user = tUser.builder()
-                        .username(textMessage.substring(8).trim())
-                        .chat_id(chat_id)
-                        .id(update.getMessage().getMessageId())
-                        .build();
+                user.setUsername(textMessage.substring(8).trim());
+                user.setChat_id(chat_id);
+                user.setId(update.getMessage().getMessageId());
                 systemBot.addUserForDB(user);
                 message.setText("Записала, шеф.");
                 execute(message);
@@ -91,18 +89,26 @@ public class myBot extends TelegramLongPollingBot {
 
 
             if ((textMessage.contains("/all") || (textMessage.contains("@all")))) {
-                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id));
-                execute(message);
+                try {
+                    message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id));
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
 
             if ((textMessage.startsWith("/dr") || (textMessage.startsWith("@dr")))) {
-                if (textMessage.length() == 3) {
-                    message.setText(systemBot.getAllUsersAndBirthday(chat_id));
-                } else {
-                    message.setText(systemBot.getUserByUsername(textMessage.substring(3).trim()).username
-                            + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
+                try {
+                    if (textMessage.length() == 3) {
+                        message.setText(systemBot.getAllUsersAndBirthday(chat_id));
+                    } else {
+                        message.setText(systemBot.getUserByUsername(textMessage.substring(3).trim()).username
+                                + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
+                    }
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
                 }
-                execute(message);
             }
 
             if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
