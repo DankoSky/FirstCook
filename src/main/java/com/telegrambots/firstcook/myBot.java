@@ -1,6 +1,7 @@
 package com.telegrambots.firstcook;
 
 import com.telegrambots.firstcook.model.tUser;
+
 import com.telegrambots.firstcook.service.tUserServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -32,12 +34,10 @@ public class myBot extends TelegramLongPollingBot {
     @Value("${telegramBot.botToken}")
     private String botToken;
 
-
     private tUserServiceImpl systemBot;
 
-
     @Autowired
-    public myBot(tUserServiceImpl systemBot) {
+    public myBot(tUserServiceImpl systemBot) {   
         this.systemBot = systemBot;
     }
 
