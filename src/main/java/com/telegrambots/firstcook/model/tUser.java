@@ -4,30 +4,23 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-//import org.springframework.data.mongodb.core.mapping.Document;
-//
-//import java.io.Serializable;
 
 
-@Getter
-@Setter
+@Data
 @FieldDefaults(level = AccessLevel.PUBLIC)
 @Entity
-@Table(name = "users_chat")
-//@Document(collection = "myFirstDatabase")
+@Table(name = "sweet_kitty")
 @NoArgsConstructor
 @AllArgsConstructor
-public class tUser //implements Serializable
-{
+@Builder
+public class tUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String username;
     String chat_id;
+    String birthday;
 
-    public tUser(String username, String chat_id) {
-        this.username = username;
-        this.chat_id = chat_id;
-    }
+
 }
