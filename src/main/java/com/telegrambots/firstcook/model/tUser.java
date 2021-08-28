@@ -2,23 +2,27 @@ package com.telegrambots.firstcook.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
-
+import javax.persistence.*;
+//import org.springframework.data.mongodb.core.mapping.Document;
+//
+//import java.io.Serializable;
 
 
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PUBLIC)
-@Document(collection = "myFirstDatabase")
+@Entity
+@Table(name = "users_chat")
+//@Document(collection = "myFirstDatabase")
 @NoArgsConstructor
 @AllArgsConstructor
-public class tUser implements Serializable {
+public class tUser //implements Serializable
+{
 
     @Id
-    String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Integer id;
     String username;
     String chat_id;
 

@@ -53,7 +53,7 @@ public class myBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.getMessage() != null && update.getMessage().hasText()) {
-            String chat_id = String.valueOf(update.getMessage().getChatId());
+            String chat_id = update.getMessage().getChatId().toString();
             String textMessage = update.getMessage().getText().toLowerCase();
             SendMessage message = new SendMessage();
             tUser tUser = new tUser();
@@ -63,7 +63,7 @@ public class myBot extends TelegramLongPollingBot {
             if (textMessage.startsWith("/adduser")) {
                 tUser.setUsername(textMessage.substring(8).trim());
                 tUser.setChat_id(chat_id);
-                tUser.setId(update.getMessage().getMessageId().toString());
+                tUser.setId(update.getMessage().getMessageId());
                 systemBot.addUserForDB(tUser);
                 message.setText("Записала, шеф.");
                 execute(message);
