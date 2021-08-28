@@ -1,7 +1,8 @@
 package com.telegrambots.firstcook;
 
 import com.telegrambots.firstcook.model.tUser;
-import com.telegrambots.firstcook.service.UsersProfileServiceImpl;
+
+import com.telegrambots.firstcook.service.tUserServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -30,12 +34,10 @@ public class myBot extends TelegramLongPollingBot {
     @Value("${telegramBot.botToken}")
     private String botToken;
 
-
-    private UsersProfileServiceImpl systemBot;
-
+    private tUserServiceImpl systemBot;
 
     @Autowired
-    public myBot(UsersProfileServiceImpl systemBot) {
+    public myBot(tUserServiceImpl systemBot) {   
         this.systemBot = systemBot;
     }
 
@@ -49,26 +51,57 @@ public class myBot extends TelegramLongPollingBot {
         return botToken;
     }
 
+    private List<String> picture = new ArrayList<>() {{
+        add("https://img3.goodfon.ru/wallpaper/nbig/0/3c/minions-bob-look-happy.jpg");
+        add("https://cs8.pikabu.ru/post_img/2016/04/03/11/145970901515739079.png");
+        add("https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg");
+    }};
+
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
+
+
         if (update.getMessage() != null && update.getMessage().hasText()) {
-            String chat_id = String.valueOf(update.getMessage().getChatId());
+
+            String chat_id = update.getMessage().getChatId().toString();
             String textMessage = update.getMessage().getText().toLowerCase();
             SendMessage message = new SendMessage();
-            tUser tUser = new tUser();
+
             message.setChatId(chat_id);
-            int count = update.getMessage().getMessageId();
+            int count = update.getMessage().getMessageId();  //  id сообщения, чтобы выбрасывать в определенный момент событие.
+            Random random = new Random();
 
             if (textMessage.startsWith("/adduser")) {
-                tUser.setUsername(textMessage.substring(8).trim());
-                tUser.setChat_id(chat_id);
-                tUser.setId(update.getMessage().getMessageId().toString());
-                systemBot.addUserForDB(tUser);
+                tUser user = tUser.builder()
+                        .username(textMessage.substring(8).trim())
+                        .chat_id(chat_id)
+                        .id(update.getMessage().getMessageId())
+                        .build();
+                systemBot.addUserForDB(user);
                 message.setText("Записала, шеф.");
                 execute(message);
-            } else if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
-                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update.getMessage().getChatId().toString()));
+            }
+
+            if (textMessage.startsWith("/adr") & textMessage.endsWith("dr")) {
+                systemBot.setBirthday(textMessage.substring(4, textMessage.length() - 11).trim(), textMessage.substring((textMessage.length() - textMessage.substring(11).trim().length()), textMessage.length() - 3));
+                message.setText("Записала др, шеф.");
+                execute(message);
+            }
+
+
+            if ((textMessage.contains("/all") || (textMessage.contains("@all")))) {
+                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id));
+                execute(message);
+            }
+
+            if ((textMessage.startsWith("/dr") || (textMessage.startsWith("@dr")))) {
+                if (textMessage.length() == 3) {
+                    message.setText(systemBot.getAllUsersAndBirthday(chat_id));
+                } else {
+                    message.setText(systemBot.getUserByUsername(textMessage.substring(3).trim()).username
+                            + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
+                }
                 execute(message);
             }
 
@@ -76,7 +109,8 @@ public class myBot extends TelegramLongPollingBot {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("Frontend для пидоров");
-                    TimeUnit.SECONDS.sleep(5);
+                    int k = random.nextInt(5);
+                    TimeUnit.SECONDS.sleep(k);
                     execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -87,12 +121,14 @@ public class myBot extends TelegramLongPollingBot {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("Бэкенд для солидных господ, мое увожение ");
-                    TimeUnit.SECONDS.sleep(5);
+                    int j = random.nextInt(5);
+                    TimeUnit.SECONDS.sleep(j);
                     execute(message);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
             }
+
             if (count % 150 == 0) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
@@ -105,32 +141,20 @@ public class myBot extends TelegramLongPollingBot {
             }
 
             if (count % 100 == 0) {
-                Random random = new Random();
                 int i = random.nextInt(3);
-                String url1 = "https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg";
-                String url2 = "https://img3.goodfon.ru/wallpaper/nbig/0/3c/minions-bob-look-happy.jpg";
-                String url3 = "https://cs8.pikabu.ru/post_img/2016/04/03/11/145970901515739079.png";
-
-                if (i == 0) {
-                    sendImageFromUrl(url1, chat_id);
-                }
-                if (i == 1) {
-                    sendImageFromUrl(url2, chat_id);
-                }
-                if (i == 2) {
-                    sendImageFromUrl(url3, chat_id);
-                }
+                sendImageFromUrl(picture, i, chat_id);
             }
         }
     }
 
-    public void sendImageFromUrl(String url, String chatId) {
+
+    public void sendImageFromUrl(List<String> picture, Integer random, String chatId) {
         // Create send method
         SendPhoto sendPhotoRequest = new SendPhoto();
         // Set destination chat id
         sendPhotoRequest.setChatId(chatId);
         // Set the photo url as a simple photo
-        sendPhotoRequest.setPhoto(new InputFile(url));
+        sendPhotoRequest.setPhoto(new InputFile(picture.get(random)));
         try {
             // Execute the method
             execute(sendPhotoRequest);

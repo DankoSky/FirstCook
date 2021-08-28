@@ -2,28 +2,20 @@ package com.telegrambots.firstcook.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import javax.persistence.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.io.Serializable;
-
-
-
-@Getter
-@Setter
+@Data
 @FieldDefaults(level = AccessLevel.PUBLIC)
 @Entity
+@Table(name = "sweet_kitty")
 @NoArgsConstructor
 @AllArgsConstructor
-public class tUser implements Serializable {
-
+@Builder
+public class tUser {
     @Id
-    String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Integer id;
     String username;
     String chat_id;
-
-    public tUser(String username, String chat_id) {
-        this.username = username;
-        this.chat_id = chat_id;
-    }
+    String birthday;
 }
