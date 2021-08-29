@@ -59,18 +59,17 @@ public class myBot extends TelegramLongPollingBot {
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
+        String chat_id = update.getMessage().getChatId().toString();
+        String textMessage = update.getMessage().getText().toLowerCase();
+        SendMessage message = new SendMessage();
+        tUser user = new tUser();
+        message.setChatId(chat_id);
+        int count = update.getMessage().getMessageId();  //  id сообщения, чтобы выбрасывать в определенный момент событие.
+        Random random = new Random();
+
         if (update.getMessage() != null && update.getMessage().hasText()) {
-
-            String chat_id = update.getMessage().getChatId().toString();
-            String textMessage = update.getMessage().getText().toLowerCase();
-            SendMessage message = new SendMessage();
-            tUser user = new tUser();
-            message.setChatId(chat_id);
-            int count = update.getMessage().getMessageId();  //  id сообщения, чтобы выбрасывать в определенный момент событие.
-            Random random = new Random();
-
             if (textMessage.startsWith("/delete")) {
-                systemBot.deleteByUserName(textMessage.substring(7).trim(),chat_id);
+                systemBot.deleteByUserName(textMessage.substring(7).trim(), chat_id);
                 message.setText("Записала, шеф.");
                 execute(message);
             }
@@ -87,7 +86,6 @@ public class myBot extends TelegramLongPollingBot {
             if (textMessage.startsWith("/adr") & textMessage.endsWith("dr")) {
                 tUser userdr = systemBot.getUserByUsername(textMessage.substring(4, textMessage.length() - 11).trim());
                 userdr.setBirthday(textMessage.substring((textMessage.length() - textMessage.substring(11).trim().length()), textMessage.length() - 3));
-//                systemBot.setBirthday(textMessage.substring(4, textMessage.length() - 11).trim(), textMessage.substring((textMessage.length() - textMessage.substring(11).trim().length()), textMessage.length() - 3));
                 message.setText("Записала др, шеф.");
                 execute(message);
             }
@@ -102,64 +100,41 @@ public class myBot extends TelegramLongPollingBot {
             }
 
             if ((textMessage.startsWith("/dr") || (textMessage.startsWith("@dr")))) {
-                try {
-                    if (textMessage.length() == 3) {
-                        message.setText(systemBot.getAllUsersAndBirthday(chat_id));
-                    } else {
-                        message.setText(systemBot.getUserByUsername(textMessage.substring(3).trim()).username
-                                + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
-                    }
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
+                if (textMessage.length() == 3) {
+                    message.setText(systemBot.getAllUsersAndBirthday(chat_id));
+                } else {
+                    message.setText(systemBot.getUserByUsername(textMessage.substring(3).trim()).username
+                            + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
                 }
+                execute(message);
+
             }
 
-            if (textMessage.contains("фронт")
-                    || textMessage.contains("front")
-                    || textMessage.contains("frontend")
-                    || textMessage.contains("front-end")) {
-                try {
-                    message.setReplyToMessageId(update.getMessage().getMessageId());
-                    message.setText("Frontend для пидоров");
-                    int k = random.nextInt(5);
-                    TimeUnit.SECONDS.sleep(k);
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (textMessage.contains("бэк")
-                    || textMessage.contains("backend")
-                    || textMessage.contains("бекенд")) {
-                try {
-                    message.setReplyToMessageId(update.getMessage().getMessageId());
-                    message.setText("Бэкенд для солидных господ, мое увожение ");
-                    int j = random.nextInt(5);
-                    TimeUnit.SECONDS.sleep(j);
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
 
             if (count % 150 == 0) {
-                try {
-                    message.setReplyToMessageId(update.getMessage().getMessageId());
-                    message.setText("А ты походу шаришь");
-                    TimeUnit.SECONDS.sleep(5);
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+                message.setReplyToMessageId(update.getMessage().getMessageId());
+                message.setText("А ты походу шаришь");
+                TimeUnit.SECONDS.sleep(5);
+                execute(message);
             }
 
-            if (count % 100 == 0) {
+            if (count % 70 == 0) {
                 int i = random.nextInt(picture.size());
                 message.setReplyToMessageId(update.getMessage().getMessageId());
                 sendImageFromUrl(picture, i, chat_id);
             }
+        }
+
+        if (update.getMessage() != null && update.getMessage().hasText()) {
+            if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
+                message.setText("Frontend для пидоров");
+            }
+            if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
+                message.setText("Бэкенд для солидных господ, мое увожение ");
+            }
+            message.setReplyToMessageId(update.getMessage().getMessageId());
+            TimeUnit.SECONDS.sleep(3);
+            execute(message);
         }
     }
 

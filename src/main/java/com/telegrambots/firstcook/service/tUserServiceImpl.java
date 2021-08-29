@@ -42,8 +42,6 @@ public class tUserServiceImpl {
             }
         }
         return s.toString();
-
-
     }
 
     public tUser getUserByUsername(String username) {
@@ -54,15 +52,6 @@ public class tUserServiceImpl {
             }
         }
         return new tUser();
-    }
-
-    public void setBirthday(String username, String birthday) {
-        List<tUser> list = repository.findAll();
-        for (tUser tuser : list) {
-            if (tuser.username.equals(username)) {
-                tuser.setBirthday(birthday);
-            }
-        }
     }
 
     public String deleteByUserName(String username, String chat_id){
