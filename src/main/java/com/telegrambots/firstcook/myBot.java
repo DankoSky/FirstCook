@@ -67,38 +67,27 @@ public class myBot extends TelegramLongPollingBot {
         int count = update.getMessage().getMessageId();  //  id сообщения, чтобы выбрасывать в определенный момент событие.
         Random random = new Random();
 
-        if (update.getMessage() != null && update.getMessage().hasText()) {
+        if (update.getMessage() != null && textMessage.startsWith("/")) {
+
             if (textMessage.startsWith("/delete")) {
                 systemBot.deleteByUserName(textMessage.substring(7).trim(), chat_id);
                 message.setText("Записала, шеф.");
-                execute(message);
             }
-
             if (textMessage.startsWith("/adduser")) {
                 user.setUsername(textMessage.substring(8).trim());
                 user.setChat_id(chat_id);
                 user.setId(update.getMessage().getMessageId());
                 systemBot.addUserForDB(user);
                 message.setText("Записала, шеф.");
-                execute(message);
             }
-
             if (textMessage.startsWith("/adr") & textMessage.endsWith("dr")) {
                 tUser userdr = systemBot.getUserByUsername(textMessage.substring(4, textMessage.length() - 11).trim());
                 userdr.setBirthday(textMessage.substring((textMessage.length() - textMessage.substring(11).trim().length()), textMessage.length() - 3));
                 message.setText("Записала др, шеф.");
-                execute(message);
             }
-
             if ((textMessage.contains("/all") || (textMessage.contains("@all")))) {
-                try {
                     message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id));
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
             }
-
             if ((textMessage.startsWith("/dr") || (textMessage.startsWith("@dr")))) {
                 if (textMessage.length() == 3) {
                     message.setText(systemBot.getAllUsersAndBirthday(chat_id));
@@ -106,23 +95,8 @@ public class myBot extends TelegramLongPollingBot {
                     message.setText(systemBot.getUserByUsername(textMessage.substring(3).trim()).username
                             + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
                 }
-                execute(message);
-
             }
-
-
-            if (count % 150 == 0) {
-                message.setReplyToMessageId(update.getMessage().getMessageId());
-                message.setText("А ты походу шаришь");
-                TimeUnit.SECONDS.sleep(5);
-                execute(message);
-            }
-
-            if (count % 70 == 0) {
-                int i = random.nextInt(picture.size());
-                message.setReplyToMessageId(update.getMessage().getMessageId());
-                sendImageFromUrl(picture, i, chat_id);
-            }
+            execute(message);
         }
 
         if (update.getMessage() != null && update.getMessage().hasText()) {
@@ -135,6 +109,17 @@ public class myBot extends TelegramLongPollingBot {
             message.setReplyToMessageId(update.getMessage().getMessageId());
             TimeUnit.SECONDS.sleep(3);
             execute(message);
+        }
+        if (update.getMessage() != null && update.getMessage().hasText()){
+            message.setReplyToMessageId(update.getMessage().getMessageId());
+            if (count % 150 == 0) {
+                message.setText("А ты походу шаришь");
+                execute(message);
+            }
+            if (count % 70 == 0) {
+                int i = random.nextInt(picture.size());
+                sendImageFromUrl(picture, i, chat_id);
+            }
         }
     }
 
