@@ -3,10 +3,7 @@ package com.telegrambots.firstcook;
 import com.telegrambots.firstcook.model.tUser;
 
 import com.telegrambots.firstcook.service.tUserServiceImpl;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Component
 @NoArgsConstructor
@@ -55,13 +53,12 @@ public class myBot extends TelegramLongPollingBot {
         add("https://img3.goodfon.ru/wallpaper/nbig/0/3c/minions-bob-look-happy.jpg");
         add("https://cs8.pikabu.ru/post_img/2016/04/03/11/145970901515739079.png");
         add("https://krasivosti.pro/uploads/posts/2021-06/1623640057_48-krasivosti_pro-p-amerikanskii-barsuk-zhivotnie-krasivo-foto-49.jpg");
+        add("https://sun9-70.userapi.com/impf/c629226/v629226240/2c1df/p2f4otGoXE4.jpg?size=800x450&quality=96&keep_aspect_ratio=1&background=000000&sign=dbecfb7e67db5421e86e038afcf9d88b&type=video_thumb");
     }};
 
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-
-
         if (update.getMessage() != null && update.getMessage().hasText()) {
 
             String chat_id = update.getMessage().getChatId().toString();
@@ -71,6 +68,12 @@ public class myBot extends TelegramLongPollingBot {
             message.setChatId(chat_id);
             int count = update.getMessage().getMessageId();  //  id сообщения, чтобы выбрасывать в определенный момент событие.
             Random random = new Random();
+
+            if (textMessage.startsWith("/delete")) {
+                systemBot.deleteByUserName(textMessage.substring(7).trim(),chat_id);
+                message.setText("Записала, шеф.");
+                execute(message);
+            }
 
             if (textMessage.startsWith("/adduser")) {
                 user.setUsername(textMessage.substring(8).trim());
@@ -82,11 +85,12 @@ public class myBot extends TelegramLongPollingBot {
             }
 
             if (textMessage.startsWith("/adr") & textMessage.endsWith("dr")) {
-                systemBot.setBirthday(textMessage.substring(4, textMessage.length() - 11).trim(), textMessage.substring((textMessage.length() - textMessage.substring(11).trim().length()), textMessage.length() - 3));
+                tUser userdr = systemBot.getUserByUsername(textMessage.substring(4, textMessage.length() - 11).trim());
+                userdr.setBirthday(textMessage.substring((textMessage.length() - textMessage.substring(11).trim().length()), textMessage.length() - 3));
+//                systemBot.setBirthday(textMessage.substring(4, textMessage.length() - 11).trim(), textMessage.substring((textMessage.length() - textMessage.substring(11).trim().length()), textMessage.length() - 3));
                 message.setText("Записала др, шеф.");
                 execute(message);
             }
-
 
             if ((textMessage.contains("/all") || (textMessage.contains("@all")))) {
                 try {
@@ -111,7 +115,10 @@ public class myBot extends TelegramLongPollingBot {
                 }
             }
 
-            if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
+            if (textMessage.contains("фронт")
+                    || textMessage.contains("front")
+                    || textMessage.contains("frontend")
+                    || textMessage.contains("front-end")) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("Frontend для пидоров");
@@ -123,7 +130,9 @@ public class myBot extends TelegramLongPollingBot {
                 }
             }
 
-            if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
+            if (textMessage.contains("бэк")
+                    || textMessage.contains("backend")
+                    || textMessage.contains("бекенд")) {
                 try {
                     message.setReplyToMessageId(update.getMessage().getMessageId());
                     message.setText("Бэкенд для солидных господ, мое увожение ");
@@ -147,7 +156,8 @@ public class myBot extends TelegramLongPollingBot {
             }
 
             if (count % 100 == 0) {
-                int i = random.nextInt(3);
+                int i = random.nextInt(picture.size());
+                message.setReplyToMessageId(update.getMessage().getMessageId());
                 sendImageFromUrl(picture, i, chat_id);
             }
         }

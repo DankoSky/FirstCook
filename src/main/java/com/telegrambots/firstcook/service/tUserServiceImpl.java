@@ -15,7 +15,6 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class tUserServiceImpl {
-    @Autowired
     private UserProfilePostgreRepository repository;
 
 
@@ -64,6 +63,16 @@ public class tUserServiceImpl {
                 tuser.setBirthday(birthday);
             }
         }
+    }
 
+    public String deleteByUserName(String username, String chat_id){
+        List<tUser> list = repository.findAll();
+        for (tUser tuser : list) {
+            if (tuser.username.equals(username)) {
+                repository.delete(tuser);
+                return "Удален" + tuser.username;
+            }
+        }
+       return "Не удалось найти: " + username;
     }
 }
