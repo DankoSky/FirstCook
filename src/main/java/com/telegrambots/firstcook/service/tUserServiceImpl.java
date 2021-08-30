@@ -67,6 +67,18 @@ public class tUserServiceImpl {
         return new tUser();
     }
 
+    public boolean setAdmin(String username) {
+        List<tUser> list = repository.findAll();
+        for (tUser tuser : list) {
+            if (tuser.username.equals(username)) {
+                tuser.setAdmin(true);
+                repository.save(tuser);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String deleteByUserName(String username){
         List<tUser> list = repository.findAll();
         for (tUser tuser : list) {

@@ -2,6 +2,7 @@ package com.telegrambots.firstcook.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import javax.persistence.*;
 
 @Data
@@ -18,4 +19,7 @@ public class tUser {
     String username;
     String chat_id;
     String birthday;
+    boolean isAdmin;
+
+
 }
