@@ -136,7 +136,7 @@ public class myBot extends TelegramLongPollingBot {
                 execute(message);
             }
 
-        } else if (!user.isAdmin() && textMessage.startsWith("/")) {
+        } else if ((!user.isAdmin()) && textMessage.startsWith("/")) {
             sendImageFromUrl(picture, 4, chat_id);
         }
     }
