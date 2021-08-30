@@ -15,6 +15,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class tUserServiceImpl {
+    @Autowired
     private UserProfilePostgreRepository repository;
 
 
@@ -22,15 +23,15 @@ public class tUserServiceImpl {
         repository.save(s);
     }
 
-    public List<tUser> getAllUserForDB(String chat_id) {
+    public String getAllUserForDB(String chat_id) {
         List<tUser> temp = repository.findAll();
-//        StringBuilder s = new StringBuilder();
-//        for (tUser tUser : temp) {
-//            if (tUser.chat_id.equals(chat_id)) {
-//                s.append(tUser.username).append(", ");
-//            }
-//        }
-        return temp;
+        StringBuilder s = new StringBuilder();
+        for (tUser tUser : temp) {
+            if (tUser.chat_id.equals(chat_id)) {
+                s.append(tUser.username).append(", ");
+            }
+        }
+        return s.toString();
     }
 
     public String getAllUsersAndBirthday(String chat_id) {
@@ -54,7 +55,19 @@ public class tUserServiceImpl {
         return new tUser();
     }
 
-    public String deleteByUserName(String username, String chat_id){
+    public tUser setBirthday(String username, String date) {
+        List<tUser> list = repository.findAll();
+        for (tUser tuser : list) {
+            if (tuser.username.equals(username)) {
+                tuser.setBirthday(date);
+                repository.save(tuser);
+                return tuser;
+            }
+        }
+        return new tUser();
+    }
+
+    public String deleteByUserName(String username){
         List<tUser> list = repository.findAll();
         for (tUser tuser : list) {
             if (tuser.username.equals(username)) {
