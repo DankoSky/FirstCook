@@ -106,8 +106,8 @@ public class myBot extends TelegramLongPollingBot {
             }
         }
         user = systemBot.getUserByUsername(update.getMessage().getFrom().getUserName());
-        //&& user.isAdmin()
-        if (update.getMessage() != null && update.getMessage().hasText() && textMessage.startsWith("/") ) {
+
+        if (update.getMessage() != null && update.getMessage().hasText() && textMessage.startsWith("/") && user.isAdmin()) {
             if (textMessage.startsWith("/adu")) {
                 user.setUsername(textMessage.substring(4).trim());
                 user.setChat_id(chat_id);
