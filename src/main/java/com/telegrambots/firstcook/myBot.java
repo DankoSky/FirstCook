@@ -103,8 +103,14 @@ public class myBot extends TelegramLongPollingBot {
             }
 
             if (textMessage.startsWith("/adr")) {
-                systemBot.setBirthday(textMessage.substring(4, textMessage.length() - 8).trim(), textMessage.substring((textMessage.length() - textMessage.substring(8).trim().length())));
-                message.setText("Записала др, шеф: ");
+                String username = textMessage.substring(4, textMessage.length() - 10).trim();
+                String date = textMessage.substring((textMessage.length() - (2 + username.length())));
+                systemBot.setBirthday(username, date);
+                if(systemBot.getUserByUsername(username).username ==null) {
+                    message.setText("Такого юзера еще нет в БД");
+                }else{
+                    message.setText("Записала др, шеф");
+                }
                 execute(message);
             }
 
@@ -115,6 +121,14 @@ public class myBot extends TelegramLongPollingBot {
                     message.setText(systemBot.getUserByUsername(textMessage.substring(3).trim()).username
                             + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
                 }
+                execute(message);
+            }
+
+            if (textMessage.startsWith("/adu")) {
+                user.setUsername(textMessage.substring(4).trim());
+                user.setChat_id(chat_id);
+                systemBot.addUserForDB(user);
+                message.setText("Записала, шеф: ");
                 execute(message);
             }
         }
