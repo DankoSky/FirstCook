@@ -67,38 +67,6 @@ public class myBot extends TelegramLongPollingBot {
         int count = update.getMessage().getMessageId();  //  id сообщения, чтобы выбрасывать в определенный момент событие.
         Random random = new Random();
 
-        if (update.getMessage() != null && textMessage.startsWith("/")) {
-
-            if (textMessage.startsWith("/delete")) {
-                systemBot.deleteByUserName(textMessage.substring(7).trim(), chat_id);
-                message.setText("Записала, шеф.");
-            }
-            if (textMessage.startsWith("/adduser")) {
-                user.setUsername(textMessage.substring(8).trim());
-                user.setChat_id(chat_id);
-                user.setId(update.getMessage().getMessageId());
-                systemBot.addUserForDB(user);
-                message.setText("Записала, шеф.");
-            }
-            if (textMessage.startsWith("/adr") & textMessage.endsWith("dr")) {
-                tUser userdr = systemBot.getUserByUsername(textMessage.substring(4, textMessage.length() - 11).trim());
-                userdr.setBirthday(textMessage.substring((textMessage.length() - textMessage.substring(11).trim().length()), textMessage.length() - 3));
-                message.setText("Записала др, шеф.");
-            }
-            if ((textMessage.contains("/all") || (textMessage.contains("@all")))) {
-                    message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id));
-            }
-            if ((textMessage.startsWith("/dr") || (textMessage.startsWith("@dr")))) {
-                if (textMessage.length() == 3) {
-                    message.setText(systemBot.getAllUsersAndBirthday(chat_id));
-                } else {
-                    message.setText(systemBot.getUserByUsername(textMessage.substring(3).trim()).username
-                            + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
-                }
-            }
-            execute(message);
-        }
-
         if (update.getMessage() != null && update.getMessage().hasText()) {
             if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
                 message.setText("Frontend для пидоров");
@@ -106,22 +74,23 @@ public class myBot extends TelegramLongPollingBot {
             if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
                 message.setText("Бэкенд для солидных господ, мое увожение ");
             }
+            if (count % 150 == 0) {
+                message.setText("А ты походу шаришь");
+            }
             message.setReplyToMessageId(update.getMessage().getMessageId());
             TimeUnit.SECONDS.sleep(3);
             execute(message);
-        }
-        if (update.getMessage() != null && update.getMessage().hasText()){
-            message.setReplyToMessageId(update.getMessage().getMessageId());
-            if (count % 150 == 0) {
-                message.setText("А ты походу шаришь");
-                execute(message);
-            }
+
             if (count % 70 == 0) {
                 int i = random.nextInt(picture.size());
                 sendImageFromUrl(picture, i, chat_id);
             }
         }
+
+
     }
+
+
 
 
     public void sendImageFromUrl(List<String> picture, Integer random, String chatId) {
@@ -138,6 +107,7 @@ public class myBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
+
 
     public void sendImageFromFileId(String fileId, String chatId) {
         // Create send method
