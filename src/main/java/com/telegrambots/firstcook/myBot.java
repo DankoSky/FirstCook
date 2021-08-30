@@ -97,18 +97,21 @@ public class myBot extends TelegramLongPollingBot {
                 execute(message);
             }
 
-            if (textMessage.startsWith("/del")) {
+            if (textMessage.startsWith("/del") & (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
                 message.setText(systemBot.deleteByUserName(textMessage.substring(4).trim()));
                 execute(message);
             }
 
-            if (textMessage.startsWith("/adr")) {
+            if (textMessage.startsWith("/adr") & (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
                 String username = textMessage.substring(4, textMessage.length() - 10).trim();
-                String date = textMessage.substring((textMessage.length() - (2 + username.length())));
-                systemBot.setBirthday(username, date);
-                if(systemBot.getUserByUsername(username).username ==null) {
+                String date = textMessage.substring((textMessage.length() - (6 + username.length())));
+                Integer cour = date.length();
+                if (date.length() != 10) {
+                    message.setText("Неправильный формат даты");
+                } else if (systemBot.getUserByUsername(username).username == null) {
                     message.setText("Такого юзера еще нет в БД");
-                }else{
+                } else{
+                    systemBot.setBirthday(username, date);
                     message.setText("Записала др, шеф");
                 }
                 execute(message);
@@ -124,11 +127,11 @@ public class myBot extends TelegramLongPollingBot {
                 execute(message);
             }
 
-            if (textMessage.startsWith("/adu")) {
+            if (textMessage.startsWith("/adu") & (update.getMessage().getFrom().getUserName().equals("Dankosky"))) {
                 user.setUsername(textMessage.substring(4).trim());
                 user.setChat_id(chat_id);
                 systemBot.addUserForDB(user);
-                message.setText("Записала, шеф: ");
+                message.setText("Записала, шеф");
                 execute(message);
             }
         }
