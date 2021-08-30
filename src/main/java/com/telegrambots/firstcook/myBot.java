@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -73,7 +74,9 @@ public class myBot extends TelegramLongPollingBot {
                 message.setText("Frontend для пидоров");
                 message.setReplyToMessageId(update.getMessage().getMessageId());
                 TimeUnit.SECONDS.sleep(3);
+                System.out.println(update.getMessage().getChatId());
                 execute(message);
+
             }
             if (textMessage.contains("бэк") || textMessage.contains("backend") || textMessage.contains("бекенд")) {
                 message.setText("Бэкенд для солидных господ, мое увожение ");
@@ -117,7 +120,6 @@ public class myBot extends TelegramLongPollingBot {
             } else if (textMessage.startsWith("/adr")) {
                 String username = textMessage.substring(4, textMessage.length() - 10).trim();
                 String date = textMessage.substring((textMessage.length() - (6 + username.length())));
-                Integer cour = date.length();
                 if (date.length() != 10) {
                     message.setText("Неправильный формат даты");
                 } else if (systemBot.getUserByUsername(username).username == null) {
@@ -135,7 +137,6 @@ public class myBot extends TelegramLongPollingBot {
                 message.setText("назначила, шеф");
                 execute(message);
             }
-
         }
 
     }
