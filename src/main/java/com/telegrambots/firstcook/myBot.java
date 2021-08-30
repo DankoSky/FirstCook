@@ -86,8 +86,8 @@ public class myBot extends TelegramLongPollingBot {
                 sendImageFromUrl(picture, i, chat_id);
             }
 
-            if ((textMessage.contains("/all") || (textMessage.contains("@all")))) {
-                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id));
+            if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
+                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id).toString());
                 execute(message);
             }
         }
