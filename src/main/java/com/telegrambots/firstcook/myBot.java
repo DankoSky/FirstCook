@@ -133,9 +133,10 @@ public class myBot extends TelegramLongPollingBot {
                 systemBot.setAdmin(textMessage.substring(4).trim());
                 message.setText("назначила, шеф");
                 execute(message);
-            } else {
-                sendImageFromUrl(picture, 4, chat_id);
             }
+
+        } else if (!user.isAdmin() && textMessage.startsWith("/")) {
+            sendImageFromUrl(picture, 4, chat_id);
         }
     }
 
