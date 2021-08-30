@@ -22,15 +22,15 @@ public class tUserServiceImpl {
         repository.save(s);
     }
 
-    public String getAllUserForDB(String chat_id) {
+    public List<tUser> getAllUserForDB(String chat_id) {
         List<tUser> temp = repository.findAll();
-        StringBuilder s = new StringBuilder();
-        for (tUser tUser : temp) {
-            if (tUser.chat_id.equals(chat_id)) {
-                s.append(tUser.username).append(", ");
-            }
-        }
-        return s.toString();
+//        StringBuilder s = new StringBuilder();
+//        for (tUser tUser : temp) {
+//            if (tUser.chat_id.equals(chat_id)) {
+//                s.append(tUser.username).append(", ");
+//            }
+//        }
+        return temp;
     }
 
     public String getAllUsersAndBirthday(String chat_id) {
