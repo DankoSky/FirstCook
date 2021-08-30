@@ -113,8 +113,7 @@ public class myBot extends TelegramLongPollingBot {
                 systemBot.addUserForDB(user);
                 message.setText("Записала, шеф");
                 execute(message);
-            }
-            if (textMessage.startsWith("/adr")) {
+            } else if (textMessage.startsWith("/adr")) {
                 String username = textMessage.substring(4, textMessage.length() - 10).trim();
                 String date = textMessage.substring((textMessage.length() - (6 + username.length())));
                 Integer cour = date.length();
@@ -127,18 +126,16 @@ public class myBot extends TelegramLongPollingBot {
                     message.setText("Записала др, шеф");
                 }
                 execute(message);
-            }
-            if (textMessage.startsWith("/del")) {
+            } else if (textMessage.startsWith("/del")) {
                 message.setText(systemBot.deleteByUserName(textMessage.substring(4).trim()));
                 execute(message);
-            }
-            if (textMessage.startsWith("/set")) {
+            } else if (textMessage.startsWith("/set")) {
                 systemBot.setAdmin(textMessage.substring(4).trim());
                 message.setText("назначила, шеф");
                 execute(message);
+            } else {
+                sendImageFromUrl(picture, 4, chat_id);
             }
-        } else{
-            sendImageFromUrl(picture, 4, chat_id);
         }
     }
 
