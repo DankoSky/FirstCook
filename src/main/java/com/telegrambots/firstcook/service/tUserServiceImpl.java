@@ -90,7 +90,7 @@ public class tUserServiceImpl {
         for (tUser tuser : list) {
             if (tuser.username.equals(username)) {
                 repository.delete(tuser);
-                return "Удален" + tuser.username;
+                return "Удален " + tuser.username;
             }
         }
        return "Не удалось найти: " + username;
