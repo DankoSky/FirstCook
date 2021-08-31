@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -15,9 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @EqualsAndHashCode(callSuper = true)
@@ -56,18 +55,27 @@ public class myBot extends TelegramLongPollingBot {
         add("https://cs8.pikabu.ru/post_img/big/2016/12/27/4/148281608619023689.png");
     }};
 
+    private List<String> animation = new ArrayList<>();
+
+
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
         String chat_id = update.getMessage().getChatId().toString();
-        String textMessage = update.getMessage().getText().toLowerCase();
+        //
         SendMessage message = new SendMessage();
         tUser user = new tUser();
         message.setChatId(chat_id);
         int count = update.getMessage().getMessageId();  //  id сообщения, чтобы выбрасывать в определенный момент событие.
         Random random = new Random();
 
-        if (update.getMessage() != null && update.getMessage().hasText() && textMessage.startsWith("/") && systemBot.getUserByUsername("@" +update.getMessage().getFrom().getUserName().toLowerCase()).getIsAdmin() ==Role.ADMIN ) {
+        if (update.getMessage() != null && update.getMessage().hasAnimation()) {
+            String animationId = update.getMessage().getAnimation().getFileId();
+            animation.add(animationId);
+        }
+
+        String textMessage = update.getMessage().getText().toLowerCase();
+        if (update.getMessage() != null && update.getMessage().hasText() && textMessage.startsWith("/") && systemBot.getUserByUsername("@" + update.getMessage().getFrom().getUserName().toLowerCase()).getIsAdmin() == Role.ADMIN) {
             if (textMessage.startsWith("/adu")) {
                 user.setUsername(textMessage.substring(4).trim());
                 user.setChat_id(chat_id);
@@ -121,6 +129,13 @@ public class myBot extends TelegramLongPollingBot {
             if (count % 70 == 0) {
                 int i = random.nextInt(picture.size());
                 sendImageFromUrl(picture, i, chat_id);
+            }
+            if (count % 35 == 0) {
+                int i = random.nextInt(animation.size());
+                InputFile file = new InputFile(animation.get(i));
+                SendAnimation sendAnimation = new SendAnimation(chat_id, file);
+                sendAnimation.setReplyToMessageId(update.getMessage().getMessageId());
+                execute(sendAnimation);
             }
             if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
                 message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id));
