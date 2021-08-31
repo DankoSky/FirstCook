@@ -1,22 +1,28 @@
 package com.telegrambots.firstcook.service;
 
 
+import com.telegrambots.firstcook.model.Role;
 import com.telegrambots.firstcook.model.tUser;
 import com.telegrambots.firstcook.repository.UserProfilePostgreRepository;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import java.util.*;
+import java.util.List;
 
 @Service
-@AllArgsConstructor
 @NoArgsConstructor
 public class tUserServiceImpl {
-    @Autowired
+
     private UserProfilePostgreRepository repository;
+
+
+    @Autowired
+    public tUserServiceImpl(UserProfilePostgreRepository repository) {
+        this.repository = repository;
+    }
+
+
 
 
     public void addUserForDB(tUser s) {
@@ -71,7 +77,7 @@ public class tUserServiceImpl {
         List<tUser> list = repository.findAll();
         for (tUser tuser : list) {
             if (tuser.username.equals(username)) {
-                tuser.setAdmin(true);
+                tuser.setIsAdmin(Role.ADMIN);
                 repository.save(tuser);
                 return true;
             }

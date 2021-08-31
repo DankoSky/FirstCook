@@ -19,7 +19,8 @@ public class tUser {
     String username;
     String chat_id;
     String birthday;
-    boolean isAdmin;
+    @Enumerated
+    Role isAdmin;
 
 
 }
