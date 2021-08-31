@@ -126,11 +126,11 @@ public class myBot extends TelegramLongPollingBot {
                 TimeUnit.SECONDS.sleep(3);
                 execute(message);
             }
-            if (count % 70 == 0) {
+            if (count % 77 == 0) {
                 int i = random.nextInt(picture.size());
                 sendImageFromUrl(picture, i, chat_id);
             }
-            if (count % 35 == 0) {
+            if (count % 37 == 0) {
                 int i = random.nextInt(animation.size());
                 InputFile file = new InputFile(animation.get(i));
                 SendAnimation sendAnimation = new SendAnimation(chat_id, file);
