@@ -2,12 +2,14 @@ package com.telegrambots.firstcook.service;
 
 
 import com.telegrambots.firstcook.model.Role;
-import com.telegrambots.firstcook.model.tUser;
+import com.telegrambots.firstcook.model.User;
 import com.telegrambots.firstcook.repository.UserProfilePostgreRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
@@ -23,59 +25,65 @@ public class tUserServiceImpl {
     }
 
 
-
-
-    public void addUserForDB(tUser s) {
+    public void addUserForDB(User s) {
         repository.save(s);
     }
 
     public String getAllUserForDB(String chat_id) {
-        List<tUser> temp = repository.findAll();
+        List<User> temp = repository.findAll();
         StringBuilder s = new StringBuilder();
-        for (tUser tUser : temp) {
-            if (tUser.chat_id.equals(chat_id)) {
-                s.append(tUser.username).append(", ");
+        for (User User : temp) {
+            if (User.chat_id.equals(chat_id)) {
+                s.append(User.username).append(", ");
             }
         }
         return s.toString();
     }
 
     public String getAllUsersAndBirthday(String chat_id) {
-        List<tUser> temp = repository.findAll();
+        List<User> temp = repository.findAll();
         StringBuilder s = new StringBuilder();
-        for (tUser tUser : temp) {
-            if (tUser.chat_id.equals(chat_id)) {
-                s.append(tUser.username).append(" : ").append(tUser.birthday).append("\n");
+        for (User User : temp) {
+            if (User.chat_id.equals(chat_id)) {
+                s.append(User.username).append(" : ").append(User.birthday).append("\n");
             }
         }
         return s.toString();
     }
 
-    public tUser getUserByUsername(String username) {
-        List<tUser> list = repository.findAll();
-        for (tUser tuser : list) {
+    public User getUserByUsername(String username) {
+        List<User> list = repository.findAll();
+        for (User tuser : list) {
             if (tuser.username.equals(username)) {
                 return tuser;
             }
         }
-        return new tUser();
+        return new User();
     }
 
-    public tUser setBirthday(String username, String date) {
-        List<tUser> list = repository.findAll();
-        for (tUser tuser : list) {
-            if (tuser.username.equals(username)) {
-                tuser.setBirthday(date);
-                repository.save(tuser);
-                return tuser;
+    public String setBirthday(String InputStringCommandADR) {
+        String username = InputStringCommandADR.substring(4, InputStringCommandADR.length() - 10).trim();
+        Calendar date = CheckingConvertingInputStringDateFromChat(InputStringCommandADR);
+        String AnswerForChat = "Неверный формат даты";
+
+        if (getUserByUsername(username).username == null) {
+            AnswerForChat = "Такого юзера еще нет в БД";
+        } else {
+            List<User> list = repository.findAll();
+            for (User tuser : list) {
+                if (tuser.username.equals(username)) {
+                    tuser.setBirthday(date);
+                    repository.save(tuser);
+                    AnswerForChat = "Записала др, шеф";
+                }
             }
         }
-        return new tUser();
+        return AnswerForChat;
     }
 
     public boolean setAdmin(String username) {
-        List<tUser> list = repository.findAll();
-        for (tUser tuser : list) {
+        List<User> list = repository.findAll();
+        for (User tuser : list) {
             if (tuser.username.equals(username)) {
                 tuser.setIsAdmin(Role.ADMIN);
                 repository.save(tuser);
@@ -85,14 +93,33 @@ public class tUserServiceImpl {
         return false;
     }
 
-    public String deleteByUserName(String username){
-        List<tUser> list = repository.findAll();
-        for (tUser tuser : list) {
+    public String deleteByUserName(String username) {
+        List<User> list = repository.findAll();
+        for (User tuser : list) {
             if (tuser.username.equals(username)) {
                 repository.delete(tuser);
                 return "Удален " + tuser.username;
             }
         }
-       return "Не удалось найти: " + username;
+        return "Не удалось найти: " + username;
+    }
+
+    public Calendar CheckingConvertingInputStringDateFromChat(String ChekingDate) {
+        String date = ChekingDate.substring((ChekingDate.length() - 10));
+        int day = Integer.parseInt(date.substring(0, 2));
+        int month = Integer.parseInt(date.substring(3, 5));
+        int year = Integer.parseInt(date.substring(6, 10));
+        boolean AnswerForChat = date.length() == 10 &&
+                day >= 0 && day <= 32 &&
+                month >= 0 && month <= 13 &&
+                year >= 1950 && year <= 2022; // Проверяю дату на верный формат ввода.
+
+        Calendar UserBirthday = new GregorianCalendar();
+        if (AnswerForChat) {
+            UserBirthday.set(Calendar.DAY_OF_MONTH, day);
+            UserBirthday.set(Calendar.MONTH, month);
+            UserBirthday.set(Calendar.YEAR, year);
+        }
+        return UserBirthday;
     }
 }

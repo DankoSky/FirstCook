@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.Calendar;
+import java.util.Date;
 
 @Data
 @FieldDefaults(level = AccessLevel.PUBLIC)
@@ -12,15 +14,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class tUser {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String username;
     String chat_id;
-    String birthday;
+    Calendar birthday;
     @Enumerated
     Role isAdmin;
-
-
 }

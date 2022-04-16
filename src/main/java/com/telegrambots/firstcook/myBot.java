@@ -1,13 +1,15 @@
 package com.telegrambots.firstcook;
 
 import com.telegrambots.firstcook.model.Role;
-import com.telegrambots.firstcook.model.tUser;
+import com.telegrambots.firstcook.model.User;
 import com.telegrambots.firstcook.service.tUserServiceImpl;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendAnimation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -57,14 +59,27 @@ public class myBot extends TelegramLongPollingBot {
 
     private List<String> animation = new ArrayList<>();
 
+    @Scheduled(fixedRateString = "1000")
+    public void sendEvent(String chatId){
+        String text = "Test";
 
+        SendMessage message = new SendMessage();
+        message.setText(text);
+        message.setParseMode(ParseMode.MARKDOWN);
+        message.setChatId(String.valueOf(Long.parseLong(chatId)));
+        try {
+           execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
         String chat_id = update.getMessage().getChatId().toString();
         //
         SendMessage message = new SendMessage();
-        tUser user = new tUser();
+        User user = new User();
         message.setChatId(chat_id);
         int count = update.getMessage().getMessageId();  //  id сообщения, чтобы выбрасывать в определенный момент событие.
         Random random = new Random();
@@ -74,6 +89,8 @@ public class myBot extends TelegramLongPollingBot {
             animation.add(animationId);
         }
 
+        sendEvent(chat_id);
+
         String textMessage = update.getMessage().getText().toLowerCase();
         if (update.getMessage() != null && update.getMessage().hasText() && textMessage.startsWith("/") && systemBot.getUserByUsername("@" + update.getMessage().getFrom().getUserName().toLowerCase()).getIsAdmin() == Role.ADMIN) {
             if (textMessage.startsWith("/adu")) {
@@ -82,28 +99,15 @@ public class myBot extends TelegramLongPollingBot {
                 user.setIsAdmin(Role.USER);
                 systemBot.addUserForDB(user);
                 message.setText("Записала, шеф");
-                execute(message);
-
             } else if (textMessage.startsWith("/adr")) {
-                String username = textMessage.substring(4, textMessage.length() - 10).trim();
-                String date = textMessage.substring((textMessage.length() - 10));
-                if (date.length() != 10) {
-                    message.setText("Неправильный формат даты");
-                } else if (systemBot.getUserByUsername(username).username == null) {
-                    message.setText("Такого юзера еще нет в БД");
-                } else {
-                    systemBot.setBirthday(username, date);
-                    message.setText("Записала др, шеф");
-                }
-                execute(message);
+                message.setText(systemBot.setBirthday(textMessage));
             } else if (textMessage.startsWith("/del")) {
                 message.setText(systemBot.deleteByUserName(textMessage.substring(4).trim()));
-                execute(message);
             } else if (textMessage.startsWith("/set")) {
                 systemBot.setAdmin(textMessage.substring(4).trim());
                 message.setText("назначила, шеф");
-                execute(message);
             }
+            execute(message);
         }
         if (update.getMessage() != null && update.getMessage().hasText()) {
             if (textMessage.contains("фронт") || textMessage.contains("front") || textMessage.contains("frontend") || textMessage.contains("front-end")) {
