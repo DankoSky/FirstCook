@@ -5,7 +5,6 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.Calendar;
-import java.util.Date;
 
 @Data
 @FieldDefaults(level = AccessLevel.PUBLIC)

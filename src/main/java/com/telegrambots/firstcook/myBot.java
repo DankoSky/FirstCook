@@ -18,7 +18,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @EqualsAndHashCode(callSuper = true)
@@ -59,10 +61,10 @@ public class myBot extends TelegramLongPollingBot {
 
     private List<String> animation = new ArrayList<>();
 
-    @Scheduled(cron = "0 0 10 * * *")
+   @Scheduled(cron = "0 0 10 * * *")
+   //@Scheduled(fixedDelay = 1000L)
     public void sendEvent(){
         String text = "test";
-                //"Сегодня день рождения у нашего сладкого пирожочка:  " ;
 
         SendMessage message = new SendMessage();
         message.setText(text);
@@ -74,11 +76,12 @@ public class myBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
+
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
         String chat_id = update.getMessage().getChatId().toString();
-        //
+
         SendMessage message = new SendMessage();
         User user = new User();
         message.setChatId(chat_id);
@@ -89,8 +92,6 @@ public class myBot extends TelegramLongPollingBot {
             String animationId = update.getMessage().getAnimation().getFileId();
             animation.add(animationId);
         }
-
-        //sendEvent();
 
         String textMessage = update.getMessage().getText().toLowerCase();
         if (update.getMessage() != null && update.getMessage().hasText() && textMessage.startsWith("/") && systemBot.getUserByUsername("@" + update.getMessage().getFrom().getUserName().toLowerCase()).getIsAdmin() == Role.ADMIN) {
@@ -131,17 +132,7 @@ public class myBot extends TelegramLongPollingBot {
                 TimeUnit.SECONDS.sleep(3);
                 execute(message);
             }
-            if (count % 77 == 0) {
-                int i = random.nextInt(picture.size());
-                sendImageFromUrl(picture, i, chat_id);
-            }
-            if (count % 37 == 0) {
-                int i = random.nextInt(animation.size());
-                InputFile file = new InputFile(animation.get(i));
-                SendAnimation sendAnimation = new SendAnimation(chat_id, file);
-                sendAnimation.setReplyToMessageId(update.getMessage().getMessageId());
-                execute(sendAnimation);
-            }
+
             if ((textMessage.startsWith("/all") || (textMessage.startsWith("@all")))) {
                 message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id));
                 execute(message);
@@ -154,6 +145,18 @@ public class myBot extends TelegramLongPollingBot {
                             + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
                 }
                 execute(message);
+            }
+
+            if (count % 77 == 0) {
+                int i = random.nextInt(picture.size());
+                sendImageFromUrl(picture, i, chat_id);
+            }
+            if (count % 37 == 0) {
+                int i = random.nextInt(animation.size());
+                InputFile file = new InputFile(animation.get(i));
+                SendAnimation sendAnimation = new SendAnimation(chat_id, file);
+                sendAnimation.setReplyToMessageId(update.getMessage().getMessageId());
+                execute(sendAnimation);
             }
         }
     }
