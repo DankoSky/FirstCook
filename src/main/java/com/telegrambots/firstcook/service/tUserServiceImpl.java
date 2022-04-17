@@ -119,6 +119,10 @@ public class tUserServiceImpl {
             UserBirthday.set(Calendar.DAY_OF_MONTH, day);
             UserBirthday.set(Calendar.MONTH, month);
             UserBirthday.set(Calendar.YEAR, year);
+//            UserBirthday.set(Calendar. year);
+//            UserBirthday.set(Calendar.YEAR, year);
+//            UserBirthday.set(Calendar.YEAR, year);
+
         }
         return UserBirthday;
     }

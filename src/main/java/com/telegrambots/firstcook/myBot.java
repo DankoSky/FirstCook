@@ -59,14 +59,15 @@ public class myBot extends TelegramLongPollingBot {
 
     private List<String> animation = new ArrayList<>();
 
-    @Scheduled(fixedRateString = "1000")
-    public void sendEvent(String chatId){
-        String text = "Test";
+    @Scheduled(cron = "0 0 10 * * *")
+    public void sendEvent(){
+        String text = "test";
+                //"Сегодня день рождения у нашего сладкого пирожочка:  " ;
 
         SendMessage message = new SendMessage();
         message.setText(text);
         message.setParseMode(ParseMode.MARKDOWN);
-        message.setChatId(String.valueOf(Long.parseLong(chatId)));
+        message.setChatId("-1001296210331");
         try {
            execute(message);
         } catch (TelegramApiException e) {
@@ -89,7 +90,7 @@ public class myBot extends TelegramLongPollingBot {
             animation.add(animationId);
         }
 
-        sendEvent(chat_id);
+        //sendEvent();
 
         String textMessage = update.getMessage().getText().toLowerCase();
         if (update.getMessage() != null && update.getMessage().hasText() && textMessage.startsWith("/") && systemBot.getUserByUsername("@" + update.getMessage().getFrom().getUserName().toLowerCase()).getIsAdmin() == Role.ADMIN) {
