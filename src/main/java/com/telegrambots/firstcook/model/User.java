@@ -4,7 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 @Data
 @FieldDefaults(level = AccessLevel.PUBLIC)
@@ -19,7 +19,7 @@ public class User {
     Integer id;
     String username;
     String chat_id;
-    Calendar birthday;
+    LocalDate birthday;
     @Enumerated
     Role isAdmin;
 }
