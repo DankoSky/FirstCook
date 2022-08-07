@@ -72,7 +72,8 @@ public class myBot extends TelegramLongPollingBot {
         if (update.getMessage() != null && update.getMessage().hasText()) {
 
             if (textMessage.startsWith("/all")) {
-                execute(systemBot.getAllUserForDB(update));
+                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(chat_id));
+                execute(message);
             }
 
             if (textMessage.startsWith("/dr")) {
