@@ -12,7 +12,7 @@ public class NamesCommand implements Command {
     }
 
     @Override
-    public SendMessage execute(Update update) {
-       return userService.getAllUserForDB(update);
+    public void execute(Update update) {
+        userService.getAllUserForDB(update);
     }
 }
