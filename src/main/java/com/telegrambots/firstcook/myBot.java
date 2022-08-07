@@ -77,21 +77,21 @@ public class myBot extends TelegramLongPollingBot {
 
         AdminCommand(update, textMessage, message);
 
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            if (textMessage.startsWith(COMMAND_PREFIX)) {
-                String commandIdentifier = textMessage.split(" ")[0].toLowerCase();
-                execute(commandContainer.retrieveCommand(commandIdentifier).execute(update));
-            } else {
-                execute(commandContainer.retrieveCommand(null).execute(update));
-            }
-        }
+//        if (update.hasMessage() && update.getMessage().hasText()) {
+//            if (textMessage.startsWith(COMMAND_PREFIX)) {
+//                String commandIdentifier = textMessage.split(" ")[0].toLowerCase();
+//                execute(commandContainer.retrieveCommand(commandIdentifier).execute(update));
+//            } else {
+//                execute(commandContainer.retrieveCommand(null).execute(update));
+//            }
+//        }
 
 
         if (update.getMessage() != null && update.getMessage().hasText()) {
 
-//            if (textMessage.startsWith("/all")) {
-//                execute(systemBot.getAllUserForDB(update));
-//            }
+            if (textMessage.startsWith("/all")) {
+                execute(systemBot.getAllUserForDB(update));
+            }
 
             if (textMessage.startsWith("/dr")) {
                 if (textMessage.length() == 3) {
