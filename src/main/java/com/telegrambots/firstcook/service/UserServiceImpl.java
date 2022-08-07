@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -52,6 +53,20 @@ public class UserServiceImpl {
             }
         }
         return new User();
+    }
+
+    public String checkBirthday(LocalDate localDate){
+        List<User> temp = repository.findAll();
+        for (User user : temp) {
+            int day = user.getBirthday().getDayOfMonth();
+            int month = user.getBirthday().getMonthValue();
+            if(localDate.getMonthValue() == month && localDate.getDayOfMonth() == day ){
+                return "Сегодня день рождения: " + user.getUsername();
+
+            }
+        }
+        return "nope";
+
     }
 
 }

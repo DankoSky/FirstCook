@@ -12,6 +12,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.LocalDate;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Component
@@ -45,18 +47,14 @@ public class myBot extends TelegramLongPollingBot {
 
 
     @Scheduled(cron = "0 0 10 * * *")
-    //@Scheduled(fixedDelay = 1000L)
-    public void sendEvent() {
-        String text = "test";
-
+    public void sendEvent() throws TelegramApiException {
+        String birthday = systemBot.checkBirthday(LocalDate.now());
         SendMessage message = new SendMessage();
-        message.setText(text);
+        message.setText(birthday);
         message.setParseMode(ParseMode.MARKDOWN);
         message.setChatId("-1001296210331");
-        try {
+        if (!birthday.equals("nope")) {
             execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
         }
     }
 
