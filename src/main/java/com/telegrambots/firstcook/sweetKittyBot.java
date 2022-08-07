@@ -19,9 +19,8 @@ import java.time.LocalDate;
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
-public class myBot extends TelegramLongPollingBot {
+public class sweetKittyBot extends TelegramLongPollingBot {
 
-    public static String COMMAND_PREFIX = "/";
     @Value("${telegramBot.userName}")
     private String userName;
     @Value("${telegramBot.botToken}")
@@ -31,7 +30,7 @@ public class myBot extends TelegramLongPollingBot {
 
 
     @Autowired
-    public myBot(UserServiceImpl systemBot) {
+    public sweetKittyBot(UserServiceImpl systemBot) {
         this.systemBot = systemBot;
     }
 
