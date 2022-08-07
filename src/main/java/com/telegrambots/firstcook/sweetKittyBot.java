@@ -45,7 +45,7 @@ public class sweetKittyBot extends TelegramLongPollingBot {
     }
 
 
-    @Scheduled(cron = "0 0 10 * * *")
+    @Scheduled(cron = "0 0 6 * * *")
     public void sendEvent() throws TelegramApiException {
         String birthday = systemBot.checkBirthday(LocalDate.now());
         SendMessage message = new SendMessage();
