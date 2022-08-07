@@ -7,6 +7,8 @@ import com.telegrambots.firstcook.repository.UserProfilePostgreRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -14,13 +16,13 @@ import java.util.List;
 
 @Service
 @NoArgsConstructor
-public class tUserServiceImpl {
+public class UserServiceImpl {
 
     private UserProfilePostgreRepository repository;
 
 
     @Autowired
-    public tUserServiceImpl(UserProfilePostgreRepository repository) {
+    public UserServiceImpl(UserProfilePostgreRepository repository) {
         this.repository = repository;
     }
 
@@ -29,7 +31,9 @@ public class tUserServiceImpl {
         repository.save(s);
     }
 
-    public String getAllUserForDB(String chat_id) {
+    public SendMessage getAllUserForDB(Update update) {
+        String chat_id = update.getMessage().getChatId().toString();
+
         List<User> temp = repository.findAll();
         StringBuilder s = new StringBuilder();
         for (User User : temp) {
@@ -37,7 +41,12 @@ public class tUserServiceImpl {
                 s.append(User.username).append(", ");
             }
         }
-        return s.toString();
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chat_id);
+        message.setText("Ага, вот эти ребята: " + s);
+        return message;
+
     }
 
     public String getAllUsersAndBirthday(String chat_id) {
