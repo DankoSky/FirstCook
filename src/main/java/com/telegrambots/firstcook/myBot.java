@@ -21,7 +21,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @AllArgsConstructor
 public class myBot extends TelegramLongPollingBot {
 
-    public static String COMMAND_PREFIX = "/";
     @Value("${telegramBot.userName}")
     private String userName;
     @Value("${telegramBot.botToken}")
@@ -90,7 +89,8 @@ public class myBot extends TelegramLongPollingBot {
         if (update.getMessage() != null && update.getMessage().hasText()) {
 
             if (textMessage.startsWith("/all")) {
-                execute(systemBot.getAllUserForDB(update));
+                message.setText("Ага, вот эти ребята: " + systemBot.getAllUserForDB(update));
+                execute(message);
             }
 
             if (textMessage.startsWith("/dr")) {

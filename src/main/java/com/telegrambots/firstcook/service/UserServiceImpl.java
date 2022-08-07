@@ -41,7 +41,7 @@ public class UserServiceImpl {
         return message;
     }
 
-    public SendMessage getAllUserForDB(Update update) {
+    public String getAllUserForDB(Update update) {
         String chat_id = update.getMessage().getChatId().toString();
 
         List<User> temp = repository.findAll();
@@ -52,10 +52,8 @@ public class UserServiceImpl {
             }
         }
 
-        SendMessage message = new SendMessage();
-        message.setChatId(chat_id);
-        message.setText("Ага, вот эти ребята: " + s);
-        return message;
+
+        return s.toString();
 
     }
 
