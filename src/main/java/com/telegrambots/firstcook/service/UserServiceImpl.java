@@ -27,8 +27,18 @@ public class UserServiceImpl {
     }
 
 
-    public void addUserForDB(User s) {
-        repository.save(s);
+    public SendMessage addUserForDB(Update update) {
+        SendMessage message = new SendMessage();
+        String textMessage = update.getMessage().getText().toLowerCase();
+        String chat_id = update.getMessage().getChatId().toString();
+
+        User user = new User();
+        user.setUsername(textMessage.substring(4).trim());
+        user.setChat_id(chat_id);
+        user.setIsAdmin(Role.USER);
+        repository.save(user);
+        message.setText("Записала, шеф");
+        return message;
     }
 
     public SendMessage getAllUserForDB(Update update) {

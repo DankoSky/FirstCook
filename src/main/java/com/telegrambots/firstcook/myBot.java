@@ -2,7 +2,6 @@ package com.telegrambots.firstcook;
 
 import com.telegrambots.firstcook.command.CommandContainer;
 import com.telegrambots.firstcook.model.Role;
-import com.telegrambots.firstcook.model.User;
 import com.telegrambots.firstcook.service.UserServiceImpl;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class myBot extends TelegramLongPollingBot {
 
     private UserServiceImpl systemBot;
 
-    private  CommandContainer commandContainer;
+    private CommandContainer commandContainer;
 
 
     @Autowired
@@ -76,17 +75,16 @@ public class myBot extends TelegramLongPollingBot {
 
         String textMessage = update.getMessage().getText().toLowerCase();
 
-        CrudUser(update, textMessage, message, chat_id);
+        AdminCommand(update, textMessage, message);
 
         if (update.hasMessage() && update.getMessage().hasText()) {
             if (textMessage.startsWith(COMMAND_PREFIX)) {
                 String commandIdentifier = textMessage.split(" ")[0].toLowerCase();
-                commandContainer.retrieveCommand(commandIdentifier).execute(update);
+                execute(commandContainer.retrieveCommand(commandIdentifier).execute(update));
             } else {
-                commandContainer.retrieveCommand(null).execute(update);
+                execute(commandContainer.retrieveCommand(null).execute(update));
             }
         }
-
 
 
         if (update.getMessage() != null && update.getMessage().hasText()) {
@@ -108,22 +106,17 @@ public class myBot extends TelegramLongPollingBot {
     }
 
 
-    private void CrudUser(Update update, String textMessage, SendMessage message, String chat_id) throws TelegramApiException {
+    private void AdminCommand(Update update, String textMessage, SendMessage message) throws TelegramApiException {
         if (textMessage.startsWith("/") && isAdmin(update)) {
             if (textMessage.startsWith("/adu")) {
-                User user = new User();
-                user.setUsername(textMessage.substring(4).trim());
-                user.setChat_id(chat_id);
-                user.setIsAdmin(Role.USER);
-                systemBot.addUserForDB(user);
-                message.setText("Записала, шеф");
+                execute(systemBot.addUserForDB(update));
             } else if (textMessage.startsWith("/adr")) {
                 message.setText(systemBot.setBirthday(textMessage));
             } else if (textMessage.startsWith("/del")) {
                 message.setText(systemBot.deleteByUserName(textMessage.substring(4).trim()));
             } else if (textMessage.startsWith("/set")) {
                 systemBot.setAdmin(textMessage.substring(4).trim());
-                message.setText("назначила, шеф");
+                message.setText("Назначила, шеф");
             }
             execute(message);
         }
