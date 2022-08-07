@@ -30,10 +30,7 @@ public class UserServiceImpl {
                 s.append(User.username).append(", ");
             }
         }
-
-
         return s.toString();
-
     }
 
     public String getAllUsersAndBirthday(String chat_id) {

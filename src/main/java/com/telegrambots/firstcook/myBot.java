@@ -77,16 +77,9 @@ public class myBot extends TelegramLongPollingBot {
             }
 
             if (textMessage.startsWith("/dr")) {
-                if (textMessage.length() == 3) {
-                    message.setText(systemBot.getAllUsersAndBirthday(chat_id));
-                } else {
-                    message.setText(systemBot.getUserByUsername(textMessage.substring(3).trim()).username
-                            + " : " + systemBot.getUserByUsername(textMessage.substring(3).trim()).birthday);
-                }
+                message.setText(systemBot.getAllUsersAndBirthday(chat_id));
                 execute(message);
             }
         }
     }
-
 }
-
