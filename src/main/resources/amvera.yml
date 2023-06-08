@@ -10,4 +10,4 @@ build:
 run:
   jarName: com/telegrambots/firstcook/FirstCookApplication.java
   persistenceMount: /data
-  containerPort: 80
+  containerPort: 4040
