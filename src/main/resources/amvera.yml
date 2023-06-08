@@ -1,0 +1,13 @@
+meta:
+  environment: jvm
+  toolchain:
+    name: maven
+    version: 11
+build:
+  artifacts:
+    target/*.jar: /
+  args: spring-boot:repackage telegramBot.botToken=1803180272:AAFLDmX7y4cUDUOt4KzBie_gR97BJ-XNyqg;telegramBot.userName=SweetKitty
+run:
+  jarName: com/telegrambots/firstcook/FirstCookApplication.java
+  persistenceMount: /data
+  containerPort: 80
